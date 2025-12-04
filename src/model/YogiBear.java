@@ -1,7 +1,7 @@
 package model;
 
 public class YogiBear {
-    private int x,y;
+    private int x, y;
     private int width, height;
     private int velocityX, velocityY;
     private boolean onGround;
@@ -35,17 +35,20 @@ public class YogiBear {
         }
     }
 
-    public void update() {
+    public void update(int levelWidth, int levelHeight) {
         x += velocityX;
 
-        if (x < 0) x = 0;
-        if (x > GameConfig.WINDOW_WIDTH - width) x = GameConfig.WINDOW_WIDTH - width;
+        if (x < 0)
+            x = 0;
+        if (x > levelWidth - width)
+            x = levelWidth - width;
 
         velocityY += GameConfig.GRAVITY;
         y += velocityY;
 
-        if (y >= GameConfig.GROUND_Y - height) {
-            y = GameConfig.GROUND_Y - height;
+        // TODO temporary until collision system is done
+        if (y >= levelHeight - height) {
+            y = levelHeight - height;
             velocityY = 0;
             onGround = true;
         }
