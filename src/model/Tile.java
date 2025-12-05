@@ -5,6 +5,7 @@ public class Tile {
         AIR, // .
         WALL, // #
         PLATFORM, // =
+        GROUND, // _
         SPAWN_POINT // Y
     }
 
@@ -20,7 +21,7 @@ public class Tile {
     }
 
     public boolean isSolid() {
-        return type == Type.WALL || type == Type.PLATFORM;
+        return type == Type.WALL || type == Type.PLATFORM || type == Type.GROUND;
     }
 
     public Type getType() {

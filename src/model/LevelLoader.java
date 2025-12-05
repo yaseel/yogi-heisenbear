@@ -51,11 +51,12 @@ public class LevelLoader {
     }
 
     private static Tile.Type charToTileType(char c) {
-        switch (c) {
-            case '#': return Tile.Type.WALL;
-            case '=': return Tile.Type.PLATFORM;
-            case 'Y': return Tile.Type.SPAWN_POINT;
-            default: return Tile.Type.AIR;
-        }
+        return switch (c) {
+            case '#' -> Tile.Type.WALL;
+            case '=' -> Tile.Type.PLATFORM;
+            case '_' -> Tile.Type.GROUND;
+            case 'Y' -> Tile.Type.SPAWN_POINT;
+            default -> Tile.Type.AIR;
+        };
     }
 }
