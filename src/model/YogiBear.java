@@ -7,6 +7,7 @@ public class YogiBear {
     private int width, height;
     private int velocityX, velocityY;
     private boolean onGround;
+    private boolean crouching;
 
     public YogiBear(int x, int y) {
         this.x = x;
@@ -16,6 +17,25 @@ public class YogiBear {
         this.velocityX = 0;
         this.velocityY = 0;
         this.onGround = false;
+        this.crouching = false;
+    }
+
+    public void crouch() {
+        if (onGround && !crouching) {
+            crouching = true;
+            int prevHeight = height;
+            height /= 2;
+            y += (prevHeight - height);
+        }
+    }
+
+    public void standUp() {
+        if (crouching) {
+            crouching = false;
+            int prevHeight = height;
+            height *= 2;
+            y -= (height - prevHeight);
+        }
     }
 
     public void moveLeft() {
@@ -63,6 +83,10 @@ public class YogiBear {
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean isCrouching() {
+        return crouching;
     }
 
     public Rectangle getBounds() {

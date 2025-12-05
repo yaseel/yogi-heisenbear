@@ -42,6 +42,12 @@ public class InputHandler extends KeyAdapter {
             yogi.jump();
         }
 
+        if (pressedKeys.contains(KeyEvent.VK_S)) {
+            yogi.crouch();
+        } else {
+            yogi.standUp();
+        }
+
         if (!moving) {
             yogi.stopMoving();
         }
