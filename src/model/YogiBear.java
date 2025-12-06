@@ -8,6 +8,7 @@ public class YogiBear {
     private int velocityX, velocityY;
     private boolean onGround;
     private boolean crouching;
+    private boolean dropThroughPlatform;
 
     public YogiBear(int x, int y) {
         this.x = x;
@@ -89,6 +90,18 @@ public class YogiBear {
         return crouching;
     }
 
+    public void requestDropThrough() {
+        dropThroughPlatform = true;
+    }
+
+    public boolean isDropThroughRequested() {
+        return dropThroughPlatform;
+    }
+
+    public void clearDropThrough() {
+        dropThroughPlatform = false;
+    }
+
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
     }
@@ -111,5 +124,13 @@ public class YogiBear {
 
     public void setVelocityY(int velocityY) {
         this.velocityY = velocityY;
+    }
+
+    public boolean isJumping() {
+        return (this.velocityY < 0);
+    }
+
+    public boolean isFalling() {
+        return (this.velocityY > 0);
     }
 }

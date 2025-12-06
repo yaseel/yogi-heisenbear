@@ -44,6 +44,7 @@ public class InputHandler extends KeyAdapter {
 
         if (pressedKeys.contains(KeyEvent.VK_S)) {
             yogi.crouch();
+            yogi.requestDropThrough();
         } else {
             yogi.standUp();
         }
