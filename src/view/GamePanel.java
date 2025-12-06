@@ -16,7 +16,7 @@ public class GamePanel extends JPanel {
     public GamePanel() {
         level = LevelLoader.loadLevel("src/resources/levels/level1.txt");
 
-        setPreferredSize(new Dimension(level.getWidth(), level.getHeight()));
+        setPreferredSize(new Dimension(GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT));
         setBackground(new Color(135, 206, 235));
         setFocusable(true);
 
@@ -33,7 +33,7 @@ public class GamePanel extends JPanel {
         int delay = 1000 / GameConfig.FPS;
         gameLoop = new Timer(delay, _ -> {
             inputHandler.update();
-            yogi.update(level.getWidth());
+            yogi.update();
             checkCollisions();
             checkBagCollection();
             repaint();
@@ -67,7 +67,7 @@ public class GamePanel extends JPanel {
             }
         }
 
-        if (!onSolidGround && yogi.getY() < level.getHeight() - yogi.getHeight()) {
+        if (!onSolidGround && yogi.getY() < GameConfig.LEVEL_HEIGHT - yogi.getHeight()) {
             yogi.setOnGround(false);
         }
     }
@@ -131,6 +131,10 @@ public class GamePanel extends JPanel {
             if (!bag.isCollected() && yogi.getBounds().intersects(bag.getBounds())) {
                 bag.collect();
                 gameModel.addScore(GameConfig.POINTS_PER_BAG);
+
+                if (level.getRemainingBags() == 0) {
+                    //TODO unlock next level
+                }
             }
         }
     }

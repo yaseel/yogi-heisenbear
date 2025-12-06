@@ -12,18 +12,12 @@ public class LevelLoader {
         List<BrownBag> bags = new ArrayList<>();
         int yogiStartX = 0;
         int yogiStartY = 0;
-        int maxWidth = 0;
-        int height = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             int row = 0;
 
             while ((line = br.readLine()) != null) {
-                if (line.length() > maxWidth) {
-                    maxWidth = line.length();
-                }
-                height = row + 1;
 
                 for (int col = 0; col < line.length(); col++) {
                     char c = line.charAt(col);
@@ -49,9 +43,7 @@ public class LevelLoader {
             System.err.println("Error loading level: " + e.getMessage());
         }
 
-        int widthInPixels = maxWidth * GameConfig.TILE_SIZE;
-        int heightInPixels = height * GameConfig.TILE_SIZE;
-        return new Level(tiles, bags, yogiStartX, yogiStartY, widthInPixels, heightInPixels);
+        return new Level(tiles, bags, yogiStartX, yogiStartY);
     }
 
     private static Tile.Type charToTileType(char c) {

@@ -58,13 +58,13 @@ public class YogiBear {
         }
     }
 
-    public void update(int levelWidth) {
+    public void update() {
         x += velocityX;
 
         if (x < 0)
             x = 0;
-        if (x > levelWidth - width)
-            x = levelWidth - width;
+        if (x > GameConfig.LEVEL_WIDTH - width)
+            x = GameConfig.LEVEL_WIDTH - width;
 
         velocityY += GameConfig.GRAVITY;
         y += velocityY;

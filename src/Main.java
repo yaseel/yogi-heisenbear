@@ -1,16 +1,31 @@
+import view.GameFrame;
 import view.GamePanel;
+import view.MenuPanel;
+import view.PanelType;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Yogi Heisenbear");
+            GameFrame frame = new GameFrame();
+            MenuPanel menuPanel = new MenuPanel();
             GamePanel gamePanel = new GamePanel();
 
-            frame.add(gamePanel);
+            frame.addPanel(PanelType.MENU, menuPanel);
+            frame.addPanel(PanelType.GAME, gamePanel);
+
+            menuPanel.getStartButton().addActionListener(e -> {
+                frame.showPanel(PanelType.GAME);
+                gamePanel.requestFocusInWindow();
+            });
+
+            menuPanel.getExitButton().addActionListener(e -> {
+                System.exit(0);
+            });
+
+            frame.showPanel(PanelType.MENU);
             frame.pack();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
         });
     }
