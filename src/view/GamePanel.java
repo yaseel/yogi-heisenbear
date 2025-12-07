@@ -95,6 +95,8 @@ public class GamePanel extends JPanel {
                 stateManager.onFell();
             } else if (boundaryResult == BoundaryHandler.BoundaryResult.NEXT_LEVEL) {
                 stateManager.onLevelComplete();
+            } else if (boundaryResult == BoundaryHandler.BoundaryResult.BLOCKED) {
+                stateManager.onBlocked();
             }
 
             if (agentCollisionHandler.checkAgentCollisions()) {

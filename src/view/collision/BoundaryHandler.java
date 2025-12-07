@@ -26,6 +26,8 @@ public class BoundaryHandler {
         if (yogiRight >= GameConfig.LEVEL_WIDTH) {
             if (level.getRemainingBags() == 0) {
                 return BoundaryResult.NEXT_LEVEL;
+            } else {
+                return BoundaryResult.BLOCKED;
             }
         }
 
@@ -35,6 +37,7 @@ public class BoundaryHandler {
     public enum BoundaryResult {
         NONE,
         FAIL,
-        NEXT_LEVEL
+        NEXT_LEVEL,
+        BLOCKED
     }
 }
