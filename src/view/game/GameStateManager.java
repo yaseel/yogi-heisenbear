@@ -2,8 +2,8 @@ package view.game;
 
 import model.GameConfig;
 import model.GameModel;
-import model.Level;
-import model.YogiBear;
+import model.level.Level;
+import model.yogi.YogiBear;
 
 public class GameStateManager {
     private Level level;

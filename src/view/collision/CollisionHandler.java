@@ -1,6 +1,10 @@
 package view.collision;
 
 import model.*;
+import model.level.Level;
+import model.level.Tile;
+import model.yogi.YogiBear;
+
 import java.awt.Rectangle;
 
 public class CollisionHandler {

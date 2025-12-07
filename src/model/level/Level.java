@@ -1,5 +1,6 @@
-package model;
+package model.level;
 
+import model.BrownBag;
 import model.agent.Agent;
 
 import java.util.List;

@@ -1,5 +1,7 @@
 package view;
 
+import view.panel.PanelType;
+
 import javax.swing.*;
 import java.awt.*;
 

@@ -2,6 +2,9 @@ package view.renderer;
 
 import model.*;
 import model.agent.Agent;
+import model.level.Level;
+import model.level.Tile;
+import model.yogi.YogiBear;
 
 import java.awt.*;
 

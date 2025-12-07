@@ -1,8 +1,12 @@
-package view;
+package view.panel;
 
 import controller.InputHandler;
 import model.*;
 import model.agent.Agent;
+import model.level.Level;
+import model.level.LevelLoader;
+import model.yogi.YogiBear;
+import view.GameFrame;
 import view.collision.AgentCollisionHandler;
 import view.collision.BoundaryHandler;
 import view.collision.CollisionHandler;

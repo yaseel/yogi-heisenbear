@@ -1,4 +1,6 @@
-package model;
+package model.level;
+
+import model.GameConfig;
 
 public class Tile {
     public enum Type {

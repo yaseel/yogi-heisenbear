@@ -1,7 +1,8 @@
 package view.collision;
 
-import model.*;
 import model.agent.Agent;
+import model.level.Level;
+import model.yogi.YogiBear;
 
 import java.awt.Rectangle;
 

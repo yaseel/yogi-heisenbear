@@ -1,7 +1,7 @@
 import view.GameFrame;
-import view.GamePanel;
-import view.MenuPanel;
-import view.PanelType;
+import view.panel.GamePanel;
+import view.panel.MenuPanel;
+import view.panel.PanelType;
 
 import javax.swing.*;
 

@@ -1,5 +1,7 @@
-package model;
+package model.level;
 
+import model.BrownBag;
+import model.GameConfig;
 import model.agent.Agent;
 import model.agent.AgentSpawn;
 

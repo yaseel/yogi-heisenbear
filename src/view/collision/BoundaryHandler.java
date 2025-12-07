@@ -1,8 +1,8 @@
 package view.collision;
 
 import model.GameConfig;
-import model.Level;
-import model.YogiBear;
+import model.level.Level;
+import model.yogi.YogiBear;
 
 public class BoundaryHandler {
     private YogiBear yogi;

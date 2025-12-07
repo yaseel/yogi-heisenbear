@@ -1,7 +1,7 @@
 package controller;
 
-import model.Level;
-import model.YogiBear;
+import model.level.Level;
+import model.yogi.YogiBear;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

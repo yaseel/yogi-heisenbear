@@ -1,7 +1,7 @@
 package model.agent;
 
 import model.GameConfig;
-import model.YogiBear;
+import model.yogi.YogiBear;
 
 import java.awt.*;
 

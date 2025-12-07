@@ -1,4 +1,8 @@
-package model;
+package model.yogi;
+
+import model.GameConfig;
+import model.level.Level;
+import model.level.Tile;
 
 import java.awt.*;
 
