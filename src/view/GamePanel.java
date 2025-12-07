@@ -25,8 +25,11 @@ public class GamePanel extends JPanel {
     private GameRenderer renderer;
 
     private int currentLevelNumber = 1;
+    private GameFrame gameFrame;
 
-    public GamePanel() {
+    public GamePanel(GameFrame gameFrame) {
+        this.gameFrame = gameFrame;
+
         loadLevel(currentLevelNumber);
 
         setPreferredSize(new Dimension(GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT));
@@ -105,6 +108,11 @@ public class GamePanel extends JPanel {
             loadNextLevel();
             stateManager.resetLevelCompleteFlag();
         }
+
+        if (stateManager.isGameOver() && !stateManager.isShowingMessage()) {
+            gameFrame.showPanel(PanelType.MENU);
+            resetGame();
+        }
     }
 
     private void checkBagCollection() {
@@ -122,5 +130,21 @@ public class GamePanel extends JPanel {
         renderer.render(g, level, yogi, gameModel);
         renderer.renderMessage(g, stateManager.getDisplayMessage(), stateManager.getMessageAlpha(), getWidth(),
                 getHeight());
+    }
+
+    public void resetGame() {
+        currentLevelNumber = 1;
+        loadLevel(currentLevelNumber);
+
+        gameModel.reset();
+
+        yogi.setX(level.getYogiStartX());
+        yogi.setY(level.getYogiStartY());
+        yogi.setVelocityY(0);
+        yogi.setOnGround(false);
+
+        collisionHandler = new CollisionHandler(yogi, level);
+        agentCollisionHandler = new AgentCollisionHandler(yogi, level);
+        stateManager = new GameStateManager(level, yogi, gameModel);
     }
 }

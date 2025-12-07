@@ -14,6 +14,7 @@ public class GameStateManager {
     private int messageAlpha;
     private int messageTimer;
     private boolean levelComplete;
+    private boolean gameOver;
 
     public GameStateManager(Level level, YogiBear yogi, GameModel gameModel) {
         this.level = level;
@@ -23,20 +24,35 @@ public class GameStateManager {
         this.messageAlpha = 0;
         this.messageTimer = 0;
         this.levelComplete = false;
+        this.gameOver = false;
     }
 
     public void onCaught() {
-        displayMessage = "CAUGHT!";
+        gameModel.loseLife();
+
+        if (gameModel.getLives() <= 0) {
+            displayMessage = "GAME OVER";
+            gameOver = true;
+        } else {
+            displayMessage = "CAUGHT!";
+        }
+
         messageAlpha = 255;
         messageTimer = GameConfig.CAUGHT_MESSAGE_DURATION;
-        gameModel.loseLife();
     }
 
     public void onFell() {
-        displayMessage = "FELL!";
+        gameModel.loseLife();
+
+        if (gameModel.getLives() <= 0) {
+            displayMessage = "GAME OVER";
+            gameOver = true;
+        } else {
+            displayMessage = "FELL!";
+        }
+
         messageAlpha = 255;
         messageTimer = GameConfig.CAUGHT_MESSAGE_DURATION;
-        gameModel.loseLife();
     }
 
     public void onLevelComplete() {
@@ -55,7 +71,7 @@ public class GameStateManager {
                 displayMessage = null;
                 messageAlpha = 0;
 
-                if (!levelComplete) {
+                if (!levelComplete && !gameOver) {
                     resetLevel();
                 }
             }
@@ -92,5 +108,13 @@ public class GameStateManager {
 
     public void resetLevelCompleteFlag() {
         levelComplete = false;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void resetGameOverFlag() {
+        gameOver = false;
     }
 }
