@@ -14,7 +14,6 @@ public class CollisionHandler {
 
     public void checkAllCollisions() {
         checkTileCollisions();
-        checkBagCollection();
     }
 
     private void checkTileCollisions() {
@@ -100,14 +99,6 @@ public class CollisionHandler {
             yogi.setY(tileBottom);
             yogi.setVelocityY(0);
             yogi.setOnGround(false);
-        }
-    }
-
-    private void checkBagCollection() {
-        for (BrownBag bag : level.getBags()) {
-            if (!bag.isCollected() && yogi.getBounds().intersects(bag.getBounds())) {
-                bag.collect();
-            }
         }
     }
 }
