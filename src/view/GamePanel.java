@@ -45,7 +45,7 @@ public class GamePanel extends JPanel {
         stateManager = new GameStateManager(level, yogi, gameModel);
         renderer = new GameRenderer();
 
-        inputHandler = new InputHandler(yogi);
+        inputHandler = new InputHandler(yogi, level);
         addKeyListener(inputHandler);
 
         startGameLoop();

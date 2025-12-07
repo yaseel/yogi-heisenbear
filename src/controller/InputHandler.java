@@ -1,5 +1,6 @@
 package controller;
 
+import model.Level;
 import model.YogiBear;
 
 import java.awt.event.KeyAdapter;
@@ -9,10 +10,12 @@ import java.util.Set;
 
 public class InputHandler extends KeyAdapter {
     private YogiBear yogi;
+    private Level level;
     private Set<Integer> pressedKeys;
 
-    public InputHandler(YogiBear yogi) {
+    public InputHandler(YogiBear yogi, Level level) {
         this.yogi = yogi;
+        this.level = level;
         this.pressedKeys = new HashSet<>();
     }
 
@@ -46,7 +49,7 @@ public class InputHandler extends KeyAdapter {
             yogi.crouch();
             yogi.requestDropThrough();
         } else {
-            yogi.standUp();
+            yogi.standUp(level);
         }
 
         if (!moving) {

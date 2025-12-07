@@ -30,13 +30,34 @@ public class YogiBear {
         }
     }
 
-    public void standUp() {
+    public void standUp(Level level) {
         if (crouching) {
-            crouching = false;
-            int prevHeight = height;
-            height *= 2;
-            y -= (height - prevHeight);
+            if (canStandUp(level)) {
+                crouching = false;
+                int prevHeight = height;
+                height *= 2;
+                y -= (height - prevHeight);
+            }
         }
+    }
+
+    private boolean canStandUp(Level level) {
+        int standingHeight = height * 2;
+        int headSpace = standingHeight - height;
+        int checkY = y - headSpace;
+
+        for (Tile tile : level.getTiles()) {
+            if (tile.getType() == Tile.Type.WALL || tile.getType() == Tile.Type.GROUND) {
+                Rectangle tileRect = new Rectangle(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
+                Rectangle headRect = new Rectangle(x, checkY, width, headSpace);
+
+                if (tileRect.intersects(headRect)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public void moveLeft() {
