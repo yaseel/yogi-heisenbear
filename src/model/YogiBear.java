@@ -61,11 +61,19 @@ public class YogiBear {
     }
 
     public void moveLeft() {
-        velocityX = -GameConfig.MOVE_SPEED;
+        if (crouching) {
+            velocityX = -GameConfig.MOVE_SPEED / 2;
+        } else {
+            velocityX = -GameConfig.MOVE_SPEED;
+        }
     }
 
     public void moveRight() {
-        velocityX = GameConfig.MOVE_SPEED;
+        if (crouching) {
+            velocityX = GameConfig.MOVE_SPEED / 2;
+        } else {
+            velocityX = GameConfig.MOVE_SPEED;
+        }
     }
 
     public void stopMoving() {
@@ -74,7 +82,11 @@ public class YogiBear {
 
     public void jump() {
         if (onGround) {
-            velocityY = GameConfig.JUMP_STRENGTH;
+            if (crouching) {
+                velocityY = (int) (GameConfig.JUMP_STRENGTH * 0.6);
+            } else {
+                velocityY = GameConfig.JUMP_STRENGTH;
+            }
             onGround = false;
         }
     }
