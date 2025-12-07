@@ -87,7 +87,7 @@ public class GamePanel extends JPanel {
         checkBagCollection();
 
         if (!stateManager.isShowingMessage()) {
-            BoundaryHandler.BoundaryResult boundaryResult = boundaryHandler.checkBoundaries();
+            BoundaryHandler.BoundaryResult boundaryResult = boundaryHandler.checkBoundaries(level);
             if (boundaryResult == BoundaryHandler.BoundaryResult.FAIL) {
                 stateManager.onFell();
             } else if (boundaryResult == BoundaryHandler.BoundaryResult.NEXT_LEVEL) {
@@ -112,10 +112,6 @@ public class GamePanel extends JPanel {
             if (!bag.isCollected() && yogi.getBounds().intersects(bag.getBounds())) {
                 bag.collect();
                 stateManager.onBagCollected();
-
-                if (level.getRemainingBags() == 0) {
-                    // TODO unlock next level
-                }
             }
         }
     }

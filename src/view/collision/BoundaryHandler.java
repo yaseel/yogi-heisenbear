@@ -1,6 +1,7 @@
 package view.collision;
 
 import model.GameConfig;
+import model.Level;
 import model.YogiBear;
 
 public class BoundaryHandler {
@@ -10,7 +11,7 @@ public class BoundaryHandler {
         this.yogi = yogi;
     }
 
-    public BoundaryResult checkBoundaries() {
+    public BoundaryResult checkBoundaries(Level level) {
         int yogiLeft = yogi.getX();
         int yogiRight = yogi.getX() + yogi.getWidth();
         int yogiBottom = yogi.getY() + yogi.getHeight();
@@ -24,7 +25,9 @@ public class BoundaryHandler {
         }
 
         if (yogiLeft > GameConfig.LEVEL_WIDTH) {
-            return BoundaryResult.NEXT_LEVEL;
+            if (level.getRemainingBags() == 0) {
+                return BoundaryResult.NEXT_LEVEL;
+            }
         }
 
         return BoundaryResult.NONE;
