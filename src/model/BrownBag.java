@@ -37,4 +37,8 @@ public class BrownBag {
     public int getSize() {
         return size;
     }
+
+    public void reset() {
+        collected = false;
+    }
 }

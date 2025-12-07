@@ -9,4 +9,9 @@ public class GameConfig {
     public static final int GRAVITY = 1;
     public static final int JUMP_STRENGTH = -15;
     public static final int POINTS_PER_BAG = 100;
+
+    public static final int AGENT_SPEED = 2;
+    public static final int AGENT_PAUSE_FRAMES = 180;
+    public static final int AGENT_VISION_RANGE = 2;
+    public static final int CAUGHT_MESSAGE_DURATION = 60;
 }

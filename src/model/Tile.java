@@ -7,7 +7,8 @@ public class Tile {
         PLATFORM, // =
         GROUND, // _
         SPAWN_POINT, // Y
-        BAG // *
+        BAG, // *
+        AGENT_SPAWN // A
     }
 
     private Type type;
