@@ -33,11 +33,11 @@ public class GameStateManager {
         gameModel.loseLife();
 
         if (gameModel.getLives() <= 0) {
-            displayMessage = "GAME OVER";
+            displayMessage = GameMessages.GAME_OVER;
             gameOver = true;
             shouldResetLevel = false;
         } else {
-            displayMessage = "CAUGHT!";
+            displayMessage = GameMessages.CAUGHT;
             shouldResetLevel = true;
         }
 
@@ -49,11 +49,11 @@ public class GameStateManager {
         gameModel.loseLife();
 
         if (gameModel.getLives() <= 0) {
-            displayMessage = "GAME OVER";
+            displayMessage = GameMessages.GAME_OVER;
             gameOver = true;
             shouldResetLevel = false;
         } else {
-            displayMessage = "FELL!";
+            displayMessage = GameMessages.FELL;
             shouldResetLevel = true;
         }
 
@@ -62,14 +62,14 @@ public class GameStateManager {
     }
 
     public void onLevelComplete() {
-        displayMessage = "LEVEL COMPLETE!";
+        displayMessage = GameMessages.LEVEL_COMPLETE;
         messageAlpha = 255;
         messageTimer = GameConfig.CAUGHT_MESSAGE_DURATION;
         levelComplete = true;
     }
 
     public void onBlocked() {
-        displayMessage = "COLLECT ALL BAGS!";
+        displayMessage = GameMessages.COLLECT_ALL_BAGS;
         messageAlpha = 255;
         messageTimer = GameConfig.CAUGHT_MESSAGE_DURATION / 2;
         shouldResetLevel = false;
