@@ -16,7 +16,6 @@ public class Main {
             frame.addPanel(PanelType.GAME, gamePanel);
 
             menuPanel.getStartButton().addActionListener(e -> {
-                gamePanel.resetGame();
                 frame.showPanel(PanelType.GAME);
                 gamePanel.requestFocusInWindow();
             });

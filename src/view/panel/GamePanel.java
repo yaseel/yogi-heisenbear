@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
     private GameStateManager stateManager;
     private GameRenderer renderer;
 
-    private int currentLevelNumber = 1;
+    private int currentLevelNumber = 10;
     private GameFrame gameFrame;
 
     public GamePanel(GameFrame gameFrame) {
