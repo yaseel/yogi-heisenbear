@@ -147,9 +147,18 @@ public class GamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        renderer.render(g, level, yogi, gameModel);
-        renderer.renderMessage(g, stateManager.getDisplayMessage(), stateManager.getMessageAlpha(), getWidth(),
-                getHeight());
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        // Calculate scale factors
+        double scaleX = (double) getWidth() / GameConfig.LEVEL_WIDTH;
+        double scaleY = (double) getHeight() / GameConfig.LEVEL_HEIGHT;
+
+        g2d.scale(scaleX, scaleY);
+
+        renderer.render(g2d, level, yogi, gameModel);
+        renderer.renderMessage(g2d, stateManager.getDisplayMessage(), stateManager.getMessageAlpha(),
+                GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT);
     }
 
     public void resetGame() {
