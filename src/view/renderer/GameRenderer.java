@@ -1,6 +1,10 @@
 package view.renderer;
 
 import model.*;
+import model.bag.BrownBag;
+import model.bag.GunBag;
+import model.bag.MethBag;
+import model.bag.MoneyBag;
 import model.entity.agent.Agent;
 import model.level.Level;
 import model.level.Tile;
@@ -34,9 +38,11 @@ public class GameRenderer {
     }
 
     private void renderBags(Graphics g, Level level) {
-        g.setColor(new Color(139, 69, 19));
         for (BrownBag bag : level.getBags()) {
             if (!bag.isCollected()) {
+                if (bag instanceof MethBag) g.setColor(Color.CYAN);
+                else if (bag instanceof GunBag) g.setColor(Color.DARK_GRAY);
+                else if (bag instanceof MoneyBag) g.setColor(Color.GREEN);
                 g.fillRect(bag.getX(), bag.getY(), bag.getSize(), bag.getSize());
             }
         }

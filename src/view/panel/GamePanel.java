@@ -2,6 +2,7 @@ package view.panel;
 
 import controller.InputHandler;
 import model.*;
+import model.bag.BrownBag;
 import model.entity.agent.Agent;
 import model.level.Level;
 import model.level.LevelLoader;
@@ -126,7 +127,7 @@ public class GamePanel extends JPanel {
         for (BrownBag bag : level.getBags()) {
             if (!bag.isCollected() && yogi.getBounds().intersects(bag.getBounds())) {
                 bag.collect();
-                stateManager.onBagCollected();
+                stateManager.onBagCollected(bag);
             }
         }
     }

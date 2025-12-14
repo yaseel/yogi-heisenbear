@@ -1,11 +1,14 @@
-package model;
+package model.bag;
+
+import model.GameConfig;
 
 import java.awt.*;
 
-public class BrownBag {
-    private int x, y;
-    private int size;
-    private boolean collected;
+public abstract class BrownBag {
+    protected int x, y;
+    protected int size;
+    protected int value;
+    protected boolean collected;
 
     public BrownBag(int x, int y) {
         this.x = x;
@@ -36,5 +39,9 @@ public class BrownBag {
 
     public int getSize() {
         return size;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

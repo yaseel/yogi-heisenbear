@@ -2,6 +2,7 @@ package view.game;
 
 import model.GameConfig;
 import model.GameModel;
+import model.bag.BrownBag;
 import model.level.Level;
 import model.entity.yogi.YogiBear;
 
@@ -99,8 +100,8 @@ public class GameStateManager {
         level.resetLevel();
     }
 
-    public void onBagCollected() {
-        gameModel.addScore(GameConfig.POINTS_PER_BAG);
+    public void onBagCollected(BrownBag bag) {
+        gameModel.addScore(bag.getValue());
     }
 
     public boolean isShowingMessage() {

@@ -1,6 +1,6 @@
 package model.level;
 
-import model.BrownBag;
+import model.bag.BrownBag;
 import model.entity.agent.Agent;
 
 import java.util.List;

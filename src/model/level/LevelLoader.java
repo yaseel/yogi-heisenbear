@@ -1,7 +1,10 @@
 package model.level;
 
-import model.BrownBag;
+import model.bag.BrownBag;
 import model.GameConfig;
+import model.bag.GunBag;
+import model.bag.MethBag;
+import model.bag.MoneyBag;
 import model.entity.agent.Agent;
 import model.entity.agent.AgentSpawn;
 
@@ -60,20 +63,22 @@ public class LevelLoader {
             int y = row * GameConfig.TILE_SIZE;
 
             Tile.Type type = charToTileType(c);
-            type = handleSpecialTile(type, x, y, data);
+            type = handleSpecialTile(type, c, x, y, data);
 
             data.tiles.add(new Tile(type, x, y));
         }
     }
 
-    private static Tile.Type handleSpecialTile(Tile.Type type, int x, int y, LevelData data) {
+    private static Tile.Type handleSpecialTile(Tile.Type type, char c, int x, int y, LevelData data) {
         switch (type) {
             case SPAWN_POINT:
                 data.yogiStartX = x;
                 data.yogiStartY = y;
                 return Tile.Type.AIR;
             case BAG:
-                data.bags.add(new BrownBag(x, y));
+                if (c == '*') data.bags.add(new MethBag(x, y));
+                else if (c == '~') data.bags.add(new GunBag(x, y));
+                else if (c == '$') data.bags.add(new MoneyBag(x, y));
                 return Tile.Type.AIR;
             case AGENT_SPAWN:
                 data.agentSpawns.add(new AgentSpawn(x, y));
@@ -114,7 +119,7 @@ public class LevelLoader {
             case '=' -> Tile.Type.PLATFORM;
             case '_' -> Tile.Type.GROUND;
             case 'Y' -> Tile.Type.SPAWN_POINT;
-            case '*' -> Tile.Type.BAG;
+            case '*', '~', '$' -> Tile.Type.BAG;
             case 'A' -> Tile.Type.AGENT_SPAWN;
             default -> Tile.Type.AIR;
         };
