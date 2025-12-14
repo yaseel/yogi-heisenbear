@@ -85,20 +85,18 @@ public class GamePanel extends JPanel {
     }
 
     private void update() {
-        // stop yogi when message is displayed, except for collect all bags message
-        if (!stateManager.isShowingMessage() || Objects.equals(stateManager.getDisplayMessage(), GameMessages.COLLECT_ALL_BAGS)) {
-            inputHandler.update();
-            yogi.update();
-        }
-
         for (Agent agent : level.getAgents()) {
             agent.update();
         }
 
         checkBagCollection();
 
-        if (!stateManager.isShowingMessage()
-                || Objects.equals(stateManager.getDisplayMessage(), GameMessages.COLLECT_ALL_BAGS)) {
+        // stop yogi when message is displayed, except for collect all bags message
+        if (!stateManager.isShowingMessage() || Objects.equals(stateManager.getDisplayMessage(), GameMessages.COLLECT_ALL_BAGS)) {
+
+            inputHandler.update();
+            yogi.update();
+
             CollisionSystem.CollisionResult result = collisionSystem.checkAll();
             if (result == CollisionSystem.CollisionResult.FELL) {
                 stateManager.onFell();
