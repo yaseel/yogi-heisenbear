@@ -53,7 +53,7 @@ public class GamePanel extends JPanel {
     }
 
     private void loadLevel(int levelNumber) {
-        level = LevelLoader.loadLevel("src/resources/levels/level" + levelNumber + ".txt");
+        level = LevelLoader.loadLevel("resources/levels/level" + levelNumber + ".txt");
     }
 
     private void loadNextLevel() {
