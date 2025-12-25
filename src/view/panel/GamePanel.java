@@ -44,7 +44,7 @@ public class GamePanel extends JPanel {
 
         collisionSystem = new CollisionSystem(yogi, level);
         stateManager = new GameStateManager(level, yogi, gameModel);
-        renderer = new GameRenderer(yogi);
+        renderer = new GameRenderer();
 
         inputHandler = new InputHandler(yogi, collisionSystem);
         addKeyListener(inputHandler);
@@ -156,7 +156,7 @@ public class GamePanel extends JPanel {
 
         g2d.scale(scaleX, scaleY);
 
-        renderer.render(g2d, level, gameModel);
+        renderer.render(g2d, yogi, level, gameModel);
         renderer.renderMessage(g2d, stateManager.getDisplayMessage(), stateManager.getMessageAlpha(),
                 GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT);
     }

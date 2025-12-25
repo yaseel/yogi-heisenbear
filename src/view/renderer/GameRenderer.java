@@ -5,6 +5,7 @@ import model.bag.BrownBag;
 import model.bag.GunBag;
 import model.bag.MethBag;
 import model.bag.MoneyBag;
+
 import model.entity.agent.Agent;
 import model.level.Level;
 import model.level.Tile;
@@ -18,26 +19,28 @@ import java.io.IOException;
 
 public class GameRenderer {
 
-    private YogiBear yogi;
     private BufferedImage yogiSprite;
     private BufferedImage[][] yogiAnimations;
 
-    public GameRenderer(YogiBear yogi) {
-        this.yogi = yogi;
+    private BufferedImage agentSprite;
+    private BufferedImage[][] agentAnimations;
+
+    public GameRenderer() {
         loadSprites();
         loadAnimations();
     }
 
-    public void render(Graphics g, Level level, GameModel gameModel) {
+    public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
         renderTiles(g, level);
         renderBags(g, level);
-        renderYogi(g);
+        renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
     }
 
     private void loadSprites() {
-        yogiSprite = loadSprite(yogi.getSpritePath());
+        yogiSprite = loadSprite(YogiBear.spritePath);
+        agentSprite = loadSprite(Agent.spritePath);
     }
 
     private BufferedImage loadSprite(String path) {
@@ -57,16 +60,21 @@ public class GameRenderer {
 
     private void loadAnimations() {
         yogiAnimations = new BufferedImage[YogiBear.ANIMATION_COUNT][YogiBear.MAX_FRAMES];
+        loadSubImages(yogiAnimations, yogiSprite, YogiBear.SPRITE_WIDTH, YogiBear.SPRITE_HEIGHT);
 
-        for (int i = 0; i < yogiAnimations.length; i++) {
-            for (int j = 0; j < yogiAnimations[i].length; j++) {
-                yogiAnimations[i][j] = yogiSprite.getSubimage(
-                        j * YogiBear.SPRITE_WIDTH,
-                        i * YogiBear.SPRITE_HEIGHT,
-                        YogiBear.SPRITE_WIDTH,
-                        YogiBear.SPRITE_HEIGHT);
+        agentAnimations = new BufferedImage[Agent.ANIMATION_COUNT][Agent.MAX_FRAMES];
+        loadSubImages(agentAnimations, agentSprite, Agent.SPRITE_WIDTH, Agent.SPRITE_HEIGHT);
+    }
+
+    private void loadSubImages(BufferedImage[][] animations, BufferedImage sprite, int spriteWidth, int spriteHeight) {
+        for (int i = 0; i < animations.length; i++) {
+            for (int j = 0; j < animations[i].length; j++) {
+                animations[i][j] = sprite.getSubimage(
+                        j * spriteWidth,
+                        i * spriteHeight,
+                        spriteWidth,
+                        spriteHeight);
             }
-
         }
     }
 
@@ -99,7 +107,7 @@ public class GameRenderer {
         }
     }
 
-    private void renderYogi(Graphics g) {
+    private void renderYogi(Graphics g, YogiBear yogi) {
         double scale;
         int scaledHeight;
         int yogiY;
@@ -134,9 +142,26 @@ public class GameRenderer {
     }
 
     private void renderAgents(Graphics g, Level level) {
-        g.setColor(new Color(139, 0, 0));
+        double scale = (double) Agent.HEIGHT / Agent.SPRITE_HEIGHT;
+        int scaledHeight = Agent.HEIGHT;
+        int scaledWidth = (int) (Agent.SPRITE_WIDTH * scale);
+
         for (Agent agent : level.getAgents()) {
-            g.fillRect(agent.getX(), agent.getY(), agent.getWidth(), agent.getHeight());
+            int action = agent.getAction();
+            BufferedImage sprite = agentAnimations[action][agent.getAnimationIndex()];
+            Graphics2D g2d = (Graphics2D) g;
+
+            if (agent.isFacingRight()) {
+                g2d.drawImage(sprite,
+                        agent.getX(), agent.getY(),
+                        scaledWidth, scaledHeight,
+                        null);
+            } else {
+                g2d.drawImage(sprite,
+                        agent.getX() + scaledWidth, agent.getY(),
+                        -scaledWidth, scaledHeight,
+                        null);
+            }
         }
     }
 

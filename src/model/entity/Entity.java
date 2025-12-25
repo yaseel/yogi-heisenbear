@@ -6,23 +6,18 @@ import java.awt.Rectangle;
 
 public abstract class Entity {
     protected int x, y;
-    protected int width, height;
     protected int velocityX, velocityY;
-    protected String spritePath;
     protected int action;
 
     protected int animationTick = 0;
     protected int animationIndex = 0;
     protected boolean facingRight = true;
 
-    public Entity(int x, int y, int width, int height) {
+    public Entity(int x, int y) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
         this.velocityX = 0;
         this.velocityY = 0;
-        this.spritePath = GameConfig.BASE_SPRITE_PATH;
     }
 
     public abstract void update();
@@ -44,9 +39,7 @@ public abstract class Entity {
         }
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
-    }
+    public abstract Rectangle getBounds();
 
     public int getX() {
         return x;
@@ -54,14 +47,6 @@ public abstract class Entity {
 
     public int getY() {
         return y;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public int getVelocityY() {
@@ -78,10 +63,6 @@ public abstract class Entity {
 
     public boolean isFacingRight() {
         return facingRight;
-    }
-
-    public String getSpritePath() {
-        return spritePath;
     }
 
     public void setX(int x) {

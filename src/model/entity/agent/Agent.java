@@ -4,23 +4,33 @@ import model.GameConfig;
 import model.entity.Entity;
 import model.entity.yogi.YogiBear;
 
+import java.awt.*;
+
 public class Agent extends Entity {
-    public enum Direction {
-        LEFT, RIGHT
-    }
+
+    public static final int IDLE = 0;
+    public static final int WALK = 1;
+
+    public static final int ANIMATION_COUNT = 2;
+    public static final int MAX_FRAMES = 4;
+
+    public static final int SPRITE_WIDTH = 488;
+    public static final int SPRITE_HEIGHT = 491;
+
+    public static final int WIDTH = GameConfig.TILE_SIZE;
+    public static final int HEIGHT = GameConfig.TILE_SIZE * 2;
+
+    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "agent.png";
 
     private int startX, startY;
-    private Direction direction;
-
     private int patrolStartCol;
     private int patrolEndCol;
-
     private int targetX;
     private boolean movingRight;
     private int pauseTimer;
 
     public Agent(int x, int y, int patrolStartCol, int patrolEndCol) {
-        super(x, y, GameConfig.TILE_SIZE, GameConfig.TILE_SIZE * 2);
+        super(x, y);
         this.startX = x;
         this.startY = y;
 
@@ -29,12 +39,17 @@ public class Agent extends Entity {
 
         this.movingRight = true;
         this.targetX = patrolEndCol * GameConfig.TILE_SIZE;
-        this.direction = Direction.RIGHT;
+        this.facingRight = true;
         this.pauseTimer = 0;
+
+        updateAction();
     }
 
     @Override
     public void update() {
+        updateAction();
+        updateAnimationTick();
+
         if (pauseTimer > 0) {
             pauseTimer--;
             return;
@@ -42,7 +57,7 @@ public class Agent extends Entity {
 
         if (movingRight) {
             x += GameConfig.AGENT_SPEED;
-            direction = Direction.RIGHT;
+            facingRight = true;
             if (x >= targetX) {
                 x = targetX;
                 movingRight = false;
@@ -51,7 +66,7 @@ public class Agent extends Entity {
             }
         } else {
             x -= GameConfig.AGENT_SPEED;
-            direction = Direction.LEFT;
+            facingRight = false;
 
             if (x <= targetX) {
                 x = targetX;
@@ -64,19 +79,39 @@ public class Agent extends Entity {
 
     @Override
     protected void updateAction() {
+        int oldAction = action;
 
+        if (pauseTimer > 0) {
+            action = IDLE;
+        } else {
+            action = WALK;
+        }
+
+        if (action != oldAction) {
+            animationIndex = 0;
+            animationTick = 0;
+        }
     }
 
     @Override
     protected int getActionFrames(int action) {
-        return 1;
+        return switch (action) {
+            case IDLE -> 1;
+            case WALK -> 4;
+            default -> throw new IllegalStateException("Agent action not found: " + action);
+        };
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public boolean canSeeYogi(YogiBear yogi) {
         int visionRange = GameConfig.AGENT_VISION_RANGE * GameConfig.TILE_SIZE;
 
         int yogiBottom = yogi.getY() + yogi.getHeight();
-        int agentBottom = y + height;
+        int agentBottom = y + HEIGHT;
 
         boolean yOverlap = !(yogiBottom < y || yogi.getY() > agentBottom);
 
@@ -84,8 +119,8 @@ public class Agent extends Entity {
             return false;
         }
 
-        if (direction == Direction.RIGHT) {
-            int visionStart = x + width;
+        if (facingRight) {
+            int visionStart = x + WIDTH;
             int visionEnd = visionStart + visionRange;
             return yogi.getX() >= visionStart && yogi.getX() < visionEnd;
         } else {
@@ -100,7 +135,10 @@ public class Agent extends Entity {
         y = startY;
         movingRight = true;
         targetX = patrolEndCol * GameConfig.TILE_SIZE;
-        direction = Direction.RIGHT;
+        facingRight = true;
         pauseTimer = 0;
+        action = WALK;
+        animationIndex = 0;
+        animationTick = 0;
     }
 }

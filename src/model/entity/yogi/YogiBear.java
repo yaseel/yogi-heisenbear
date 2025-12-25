@@ -3,7 +3,11 @@ package model.entity.yogi;
 import model.GameConfig;
 import model.entity.Entity;
 
+import java.awt.*;
+
 public class YogiBear extends Entity {
+    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "yogi.png";
+
     public static final int IDLE = 0;
     public static final int WALK = 1;
     public static final int JUMP = 2;
@@ -20,11 +24,14 @@ public class YogiBear extends Entity {
     private boolean crouching;
     private boolean dropThroughPlatform;
 
+    private int width, height;
+
     public YogiBear(int x, int y) {
-        super(x, y, GameConfig.TILE_SIZE, GameConfig.TILE_SIZE * 2);
+        super(x, y);
         this.onGround = false;
         this.crouching = false;
-        this.spritePath += "yogi.png";
+        this.width = GameConfig.TILE_SIZE;
+        this.height = GameConfig.TILE_SIZE * 2;
     }
 
     public void crouch() {
@@ -114,6 +121,19 @@ public class YogiBear extends Entity {
             return;
         }
         super.updateAnimationTick();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
     }
 
     @Override
