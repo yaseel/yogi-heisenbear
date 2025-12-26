@@ -11,26 +11,21 @@ import model.level.Level;
 import model.level.Tile;
 import model.entity.yogi.YogiBear;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class GameRenderer {
 
-    private BufferedImage yogiSprite;
-    private BufferedImage[][] yogiAnimations;
-
-    private BufferedImage agentSprite;
-    private BufferedImage[][] agentAnimations;
-
-    private BufferedImage collectibleSprite;
-    private BufferedImage[][] collectibleSubImages;
+    private final SpriteAtlas spriteAtlas;
+    private final BufferedImage[][] yogiAnimations;
+    private final BufferedImage[][] agentAnimations;
+    private final BufferedImage[][] collectibleSubImages;
 
     public GameRenderer() {
-        loadSprites();
-        loadAllSubImages();
+        spriteAtlas = new SpriteAtlas();
+        yogiAnimations = spriteAtlas.getYogiAnimations();
+        agentAnimations = spriteAtlas.getAgentAnimations();
+        collectibleSubImages = spriteAtlas.getCollectibleSubImages();
     }
 
     public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
@@ -39,50 +34,6 @@ public class GameRenderer {
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
-    }
-
-    private void loadSprites() {
-        yogiSprite = loadSprite(YogiBear.spritePath);
-        agentSprite = loadSprite(Agent.spritePath);
-        collectibleSprite = loadSprite(Collectible.spritePath);
-    }
-
-    private BufferedImage loadSprite(String path) {
-        try {
-            File spriteFile = new File(path);
-            if (spriteFile.exists()) {
-                return ImageIO.read(spriteFile);
-            } else {
-                System.err.println("Sprite not found: " + spriteFile.getAbsolutePath());
-                return null;
-            }
-        } catch (IOException e) {
-            System.err.println("Failed to load sprite: " + e.getMessage());
-            return null;
-        }
-    }
-
-    private void loadAllSubImages() {
-        yogiAnimations = new BufferedImage[YogiBear.ANIMATION_COUNT][YogiBear.MAX_FRAMES];
-        loadSubImages(yogiAnimations, yogiSprite, YogiBear.SPRITE_WIDTH, YogiBear.SPRITE_HEIGHT);
-
-        agentAnimations = new BufferedImage[Agent.ANIMATION_COUNT][Agent.MAX_FRAMES];
-        loadSubImages(agentAnimations, agentSprite, Agent.SPRITE_WIDTH, Agent.SPRITE_HEIGHT);
-
-        collectibleSubImages = new BufferedImage[Collectible.COLLECTIBLE_COUNT][Collectible.MAX_FRAMES];
-        loadSubImages(collectibleSubImages, collectibleSprite, Collectible.SPRITE_WIDTH, Collectible.SPRITE_HEIGHT);
-    }
-
-    private void loadSubImages(BufferedImage[][] animations, BufferedImage sprite, int spriteWidth, int spriteHeight) {
-        for (int i = 0; i < animations.length; i++) {
-            for (int j = 0; j < animations[i].length; j++) {
-                animations[i][j] = sprite.getSubimage(
-                        j * spriteWidth,
-                        i * spriteHeight,
-                        spriteWidth,
-                        spriteHeight);
-            }
-        }
     }
 
     private void renderTiles(Graphics g, Level level) {
