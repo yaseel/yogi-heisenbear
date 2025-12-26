@@ -11,26 +11,21 @@ import model.level.Level;
 import model.level.Tile;
 import model.entity.yogi.YogiBear;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class GameRenderer {
 
-    private BufferedImage yogiSprite;
-    private BufferedImage[][] yogiAnimations;
-
-    private BufferedImage agentSprite;
-    private BufferedImage[][] agentAnimations;
-
-    private BufferedImage collectibleSprite;
-    private BufferedImage[][] collectibleSubImages;
+    private final SpriteAtlas spriteAtlas;
+    private final BufferedImage[][] yogiAnimations;
+    private final BufferedImage[][] agentAnimations;
+    private final BufferedImage[][] collectibleSubImages;
 
     public GameRenderer() {
-        loadSprites();
-        loadAllSubImages();
+        spriteAtlas = new SpriteAtlas();
+        yogiAnimations = spriteAtlas.getYogiAnimations();
+        agentAnimations = spriteAtlas.getAgentAnimations();
+        collectibleSubImages = spriteAtlas.getCollectibleSubImages();
     }
 
     public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
@@ -39,50 +34,6 @@ public class GameRenderer {
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
-    }
-
-    private void loadSprites() {
-        yogiSprite = loadSprite(YogiBear.spritePath);
-        agentSprite = loadSprite(Agent.spritePath);
-        collectibleSprite = loadSprite(Collectible.spritePath);
-    }
-
-    private BufferedImage loadSprite(String path) {
-        try {
-            File spriteFile = new File(path);
-            if (spriteFile.exists()) {
-                return ImageIO.read(spriteFile);
-            } else {
-                System.err.println("Sprite not found: " + spriteFile.getAbsolutePath());
-                return null;
-            }
-        } catch (IOException e) {
-            System.err.println("Failed to load sprite: " + e.getMessage());
-            return null;
-        }
-    }
-
-    private void loadAllSubImages() {
-        yogiAnimations = new BufferedImage[YogiBear.ANIMATION_COUNT][YogiBear.MAX_FRAMES];
-        loadSubImages(yogiAnimations, yogiSprite, YogiBear.SPRITE_WIDTH, YogiBear.SPRITE_HEIGHT);
-
-        agentAnimations = new BufferedImage[Agent.ANIMATION_COUNT][Agent.MAX_FRAMES];
-        loadSubImages(agentAnimations, agentSprite, Agent.SPRITE_WIDTH, Agent.SPRITE_HEIGHT);
-
-        collectibleSubImages = new BufferedImage[Collectible.COLLECTIBLE_COUNT][Collectible.MAX_FRAMES];
-        loadSubImages(collectibleSubImages, collectibleSprite, Collectible.SPRITE_WIDTH, Collectible.SPRITE_HEIGHT);
-    }
-
-    private void loadSubImages(BufferedImage[][] animations, BufferedImage sprite, int spriteWidth, int spriteHeight) {
-        for (int i = 0; i < animations.length; i++) {
-            for (int j = 0; j < animations[i].length; j++) {
-                animations[i][j] = sprite.getSubimage(
-                        j * spriteWidth,
-                        i * spriteHeight,
-                        spriteWidth,
-                        spriteHeight);
-            }
-        }
     }
 
     private void renderTiles(Graphics g, Level level) {
@@ -113,14 +64,12 @@ public class GameRenderer {
                     scaledHeight = MethBasket.SIZE;
                     scaledWidth = (int) (MethBasket.SPRITE_WIDTH * scale);
                     sprite = collectibleSubImages[Collectible.METH_BASKET][Collectible.DEFAULT_STATE];
-                }
-                else if (collectible instanceof Gun) {
+                } else if (collectible instanceof Gun) {
                     scale = (double) Gun.SIZE / Collectible.SPRITE_HEIGHT;
                     scaledHeight = Gun.SIZE;
                     scaledWidth = (int) (Gun.SPRITE_WIDTH * scale);
                     sprite = collectibleSubImages[Collectible.GUN][Collectible.DEFAULT_STATE];
-                }
-                else {
+                } else {
                     scale = (double) Money.SIZE / Collectible.SPRITE_HEIGHT;
                     scaledHeight = Money.SIZE;
                     scaledWidth = (int) (Money.SPRITE_WIDTH * scale);
@@ -132,8 +81,7 @@ public class GameRenderer {
                         sprite,
                         collectible.getX(), collectible.getY(),
                         scaledWidth, scaledHeight,
-                        null
-                );
+                        null);
             } else if (collectible.isCollected() && collectible instanceof Gun) {
                 scale = (double) Gun.SIZE / Collectible.SPRITE_HEIGHT;
                 scaledHeight = Gun.SIZE;
@@ -145,8 +93,7 @@ public class GameRenderer {
                         sprite,
                         collectible.getX(), collectible.getY(),
                         scaledWidth, scaledHeight,
-                        null
-                );
+                        null);
             }
         }
     }
@@ -163,7 +110,7 @@ public class GameRenderer {
         } else {
             scale = (double) yogi.getHeight() * 2 / YogiBear.SPRITE_HEIGHT;
             scaledHeight = yogi.getHeight() * 2;
-            yogiY = yogi.getY() - GameConfig.TILE_SIZE;
+            yogiY = yogi.getY() - GameConfig.TILE_SIZE * (YogiBear.TILE_HEIGHT - 2);
         }
 
         int scaledWidth = (int) (YogiBear.SPRITE_WIDTH * scale);

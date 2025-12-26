@@ -1,3 +1,4 @@
+import controller.MenuController;
 import view.GameFrame;
 import view.panel.GamePanel;
 import view.panel.MenuPanel;
@@ -10,19 +11,16 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             GameFrame frame = new GameFrame();
             MenuPanel menuPanel = new MenuPanel();
-            GamePanel gamePanel = new GamePanel(frame);
+            GamePanel gamePanel = new GamePanel();
 
             frame.addPanel(PanelType.MENU, menuPanel);
             frame.addPanel(PanelType.GAME, gamePanel);
 
-            menuPanel.getStartButton().addActionListener(e -> {
-                frame.showPanel(PanelType.GAME);
-                gamePanel.requestFocusInWindow();
-            });
+            MenuController menuController = new MenuController(frame, gamePanel);
+            gamePanel.setMenuController(menuController);
 
-            menuPanel.getExitButton().addActionListener(e -> {
-                System.exit(0);
-            });
+            menuPanel.getStartButton().addActionListener(_ -> menuController.onStartGame());
+            menuPanel.getExitButton().addActionListener(_ -> menuController.onExitGame());
 
             frame.showPanel(PanelType.MENU);
             frame.pack();

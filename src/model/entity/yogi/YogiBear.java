@@ -20,6 +20,9 @@ public class YogiBear extends Entity {
     public static final int SPRITE_WIDTH = 349;
     public static final int SPRITE_HEIGHT = 483;
 
+    public static final int TILE_WIDTH = 2;
+    public static final int TILE_HEIGHT = 4;
+
     private boolean onGround;
     private boolean crouching;
     private boolean dropThroughPlatform;
@@ -30,8 +33,8 @@ public class YogiBear extends Entity {
         super(x, y);
         this.onGround = false;
         this.crouching = false;
-        this.width = GameConfig.TILE_SIZE;
-        this.height = GameConfig.TILE_SIZE * 2;
+        this.width = GameConfig.TILE_SIZE * TILE_WIDTH;
+        this.height = GameConfig.TILE_SIZE * TILE_HEIGHT;
     }
 
     public void crouch() {

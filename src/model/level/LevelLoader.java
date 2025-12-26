@@ -76,9 +76,13 @@ public class LevelLoader {
                 data.yogiStartY = y;
                 return Tile.Type.AIR;
             case COLLECTIBLE:
-                if (c == '*') data.collectibles.add(new MethBasket(x, y));
-                else if (c == '~') data.collectibles.add(new Gun(x, y));
-                else if (c == '$') data.collectibles.add(new Money(x, y));
+                int collectibleY = y - GameConfig.TILE_SIZE * (Collectible.TILE_SIZE_COUNT - 1);
+                if (c == '*')
+                    data.collectibles.add(new MethBasket(x, collectibleY));
+                else if (c == '~')
+                    data.collectibles.add(new Gun(x, collectibleY));
+                else if (c == '$')
+                    data.collectibles.add(new Money(x, collectibleY));
                 return Tile.Type.AIR;
             case AGENT_SPAWN:
                 data.agentSpawns.add(new AgentSpawn(x, y));
@@ -106,7 +110,8 @@ public class LevelLoader {
 
             if (agentIndex < data.agentSpawns.size()) {
                 AgentSpawn spawn = data.agentSpawns.get(agentIndex);
-                data.agents.add(new Agent(spawn.x, spawn.y, startCol, endCol));
+                int agentY = spawn.y - GameConfig.TILE_SIZE * (Agent.TILE_HEIGHT - 2);
+                data.agents.add(new Agent(spawn.x, agentY, startCol, endCol));
             }
         } catch (NumberFormatException e) {
             System.err.println("Invalid route format: " + line);

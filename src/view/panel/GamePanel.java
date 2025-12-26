@@ -1,81 +1,33 @@
 package view.panel;
 
-import controller.InputHandler;
+import controller.GameController;
+import controller.MenuController;
 import model.*;
-import model.collectible.Collectible;
-import model.entity.agent.Agent;
-import model.level.Level;
-import model.level.LevelLoader;
-import model.entity.yogi.YogiBear;
-import view.GameFrame;
-import model.collision.CollisionSystem;
-import view.game.GameMessages;
-import view.game.GameStateManager;
 import view.renderer.GameRenderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class GamePanel extends JPanel {
-    private YogiBear yogi;
-    private Level level;
-    private GameModel gameModel;
-    private InputHandler inputHandler;
+    private final GameController gameController;
+    private final GameRenderer renderer;
+    private MenuController menuController;
 
-    private CollisionSystem collisionSystem;
-    private GameStateManager stateManager;
-    private GameRenderer renderer;
-
-    private int currentLevelNumber = 1;
-    private GameFrame gameFrame;
-
-    public GamePanel(GameFrame gameFrame) {
-        this.gameFrame = gameFrame;
-
-        loadLevel(currentLevelNumber);
-
+    public GamePanel() {
         setPreferredSize(new Dimension(GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT));
         setBackground(new Color(135, 206, 235));
         setFocusable(true);
 
-        yogi = new YogiBear(level.getYogiStartX(), level.getYogiStartY());
-        gameModel = new GameModel();
-
-        collisionSystem = new CollisionSystem(yogi, level);
-        stateManager = new GameStateManager(level, yogi, gameModel);
+        gameController = new GameController();
         renderer = new GameRenderer();
 
-        inputHandler = new InputHandler(yogi, collisionSystem);
-        addKeyListener(inputHandler);
+        addKeyListener(gameController.getInputHandler());
 
         startGameLoop();
     }
 
-    private void loadLevel(int levelNumber) {
-        level = LevelLoader.loadLevel("src/resources/levels/level" + levelNumber + ".txt");
-    }
-
-    private void loadNextLevel() {
-        currentLevelNumber++;
-        loadLevel(currentLevelNumber);
-        resetLevelState();
-    }
-
-    private void resetLevelState() {
-        yogi.setX(level.getYogiStartX());
-        yogi.setY(level.getYogiStartY());
-        yogi.setVelocityY(0);
-        yogi.setOnGround(false);
-
-        collisionSystem = new CollisionSystem(yogi, level);
-        stateManager = new GameStateManager(level, yogi, gameModel);
-
-        // update input handler with new collision system for new level
-        inputHandler.setCollisionSystem(collisionSystem);
-
-        // clear any stuck keys
-        inputHandler.clearAllKeys();
+    public void setMenuController(MenuController menuController) {
+        this.menuController = menuController;
     }
 
     private void startGameLoop() {
@@ -88,58 +40,22 @@ public class GamePanel extends JPanel {
     }
 
     private void update() {
-        for (Agent agent : level.getAgents()) {
-            agent.update();
-        }
+        gameController.update();
 
-        checkCollection();
-
-        // stop yogi when message is displayed, except for collect all baskets message
-        if (!stateManager.isShowingMessage() || Objects.equals(stateManager.getDisplayMessage(), GameMessages.COLLECT_ALL_BASKETS)) {
-
-            inputHandler.update();
-            yogi.update();
-
-            CollisionSystem.CollisionResult result = collisionSystem.checkAll();
-            if (result == CollisionSystem.CollisionResult.FELL) {
-                stateManager.onFell();
-            } else if (result == CollisionSystem.CollisionResult.LEVEL_COMPLETE) {
-                stateManager.onLevelComplete();
-            } else if (result == CollisionSystem.CollisionResult.CAUGHT) {
-                stateManager.onCaught();
-            } else if (result == CollisionSystem.CollisionResult.BLOCKED) {
-                stateManager.onBlocked();
+        // Handle game state transitions
+        if (gameController.isGameOver()) {
+            gameController.clearGameOverFlag();
+            gameController.resetGame();
+            if (menuController != null) {
+                menuController.returnToMenu();
             }
         }
 
-        stateManager.updateMessage();
-
-        if (stateManager.isLevelComplete() && !stateManager.isShowingMessage()) {
-            if (currentLevelNumber >= GameConfig.LAST_LEVEL_NUM) {
-                stateManager.onGameFinished();
-                stateManager.resetLevelCompleteFlag();
-            } else {
-                loadNextLevel();
-                stateManager.resetLevelCompleteFlag();
-            }
-        }
-
-        if (stateManager.isGameOver() && !stateManager.isShowingMessage()) {
-            gameFrame.showPanel(PanelType.MENU);
-            resetGame();
-        }
-
-        if (stateManager.isGameFinished() && !stateManager.isShowingMessage()) {
-            gameFrame.showPanel(PanelType.MENU);
-            resetGame();
-        }
-    }
-
-    private void checkCollection() {
-        for (Collectible collectible : level.getCollectibles()) {
-            if (!collectible.isCollected() && yogi.getBounds().intersects(collectible.getBounds())) {
-                collectible.collect();
-                stateManager.onCollect(collectible);
+        if (gameController.isGameFinished()) {
+            gameController.clearGameFinishedFlag();
+            gameController.resetGame();
+            if (menuController != null) {
+                menuController.returnToMenu();
             }
         }
     }
@@ -156,17 +72,9 @@ public class GamePanel extends JPanel {
 
         g2d.scale(scaleX, scaleY);
 
-        renderer.render(g2d, yogi, level, gameModel);
-        renderer.renderMessage(g2d, stateManager.getDisplayMessage(), stateManager.getMessageAlpha(),
+        renderer.render(g2d, gameController.getYogi(), gameController.getLevel(), gameController.getGameModel());
+        renderer.renderMessage(g2d, gameController.getStateManager().getDisplayMessage(),
+                gameController.getStateManager().getMessageAlpha(),
                 GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT);
-    }
-
-    public void resetGame() {
-        currentLevelNumber = 1;
-        loadLevel(currentLevelNumber);
-
-        gameModel.reset();
-
-        resetLevelState();
     }
 }
