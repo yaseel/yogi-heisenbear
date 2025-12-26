@@ -1,20 +1,20 @@
 package model.level;
 
-import model.bag.BrownBag;
+import model.collectible.Collectible;
 import model.entity.agent.Agent;
 
 import java.util.List;
 
 public class Level {
     private List<Tile> tiles;
-    private List<BrownBag> bags;
+    private List<Collectible> collectibles;
     private List<Agent> agents;
     private int yogiStartX;
     private int yogiStartY;
 
-    public Level(List<Tile> tiles, List<BrownBag> bags, List<Agent> agents, int yogiStartX, int yogiStartY) {
+    public Level(List<Tile> tiles, List<Collectible> collectibles, List<Agent> agents, int yogiStartX, int yogiStartY) {
         this.tiles = tiles;
-        this.bags = bags;
+        this.collectibles = collectibles;
         this.agents = agents;
         this.yogiStartX = yogiStartX;
         this.yogiStartY = yogiStartY;
@@ -24,8 +24,8 @@ public class Level {
         return tiles;
     }
 
-    public List<BrownBag> getBags() {
-        return bags;
+    public List<Collectible> getCollectibles() {
+        return collectibles;
     }
 
     public List<Agent> getAgents() {
@@ -40,10 +40,10 @@ public class Level {
         return yogiStartY;
     }
 
-    public int getRemainingBags() {
+    public int getRemainingCollectibles() {
         int count = 0;
-        for (BrownBag bag : bags) {
-            if (!bag.isCollected()) {
+        for (Collectible collectible : collectibles) {
+            if (!collectible.isCollected()) {
                 count++;
             }
         }

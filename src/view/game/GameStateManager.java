@@ -2,7 +2,7 @@ package view.game;
 
 import model.GameConfig;
 import model.GameModel;
-import model.bag.BrownBag;
+import model.collectible.Collectible;
 import model.level.Level;
 import model.entity.yogi.YogiBear;
 
@@ -72,7 +72,7 @@ public class GameStateManager {
     }
 
     public void onBlocked() {
-        displayMessage = GameMessages.COLLECT_ALL_BAGS;
+        displayMessage = GameMessages.COLLECT_ALL_BASKETS;
         messageAlpha = 255;
         messageTimer = GameConfig.MESSAGE_DURATION / 2;
     }
@@ -102,8 +102,8 @@ public class GameStateManager {
         level.resetLevel();
     }
 
-    public void onBagCollected(BrownBag bag) {
-        gameModel.addScore(bag.getValue());
+    public void onCollect(Collectible collectible) {
+        gameModel.addScore(collectible.getValue());
     }
 
     public void onGameFinished() {

@@ -1,26 +1,45 @@
 package model.entity;
 
+import model.GameConfig;
+
 import java.awt.Rectangle;
 
 public abstract class Entity {
     protected int x, y;
-    protected int width, height;
     protected int velocityX, velocityY;
+    protected int action;
 
-    public Entity(int x, int y, int width, int height) {
+    protected int animationTick = 0;
+    protected int animationIndex = 0;
+    protected boolean facingRight = true;
+
+    public Entity(int x, int y) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
         this.velocityX = 0;
         this.velocityY = 0;
     }
 
     public abstract void update();
 
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+    protected abstract void updateAction();
+
+    protected abstract int getActionFrames(int action);
+
+    protected void updateAnimationTick() {
+        animationTick++;
+
+        if (animationTick >= GameConfig.ANIMATION_SPEED) {
+            animationTick = 0;
+            animationIndex++;
+
+            if (animationIndex >= getActionFrames(action)) {
+                animationIndex = 0;
+            }
+        }
     }
+
+    public abstract Rectangle getBounds();
 
     public int getX() {
         return x;
@@ -30,20 +49,20 @@ public abstract class Entity {
         return y;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getVelocityX() {
-        return velocityX;
-    }
-
     public int getVelocityY() {
         return velocityY;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public int getAnimationIndex() {
+        return animationIndex;
+    }
+
+    public boolean isFacingRight() {
+        return facingRight;
     }
 
     public void setX(int x) {
@@ -52,10 +71,6 @@ public abstract class Entity {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public void setVelocityX(int velocityX) {
-        this.velocityX = velocityX;
     }
 
     public void setVelocityY(int velocityY) {

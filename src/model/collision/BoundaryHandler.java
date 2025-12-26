@@ -20,7 +20,7 @@ public class BoundaryHandler {
         }
 
         if (yogiRight >= GameConfig.LEVEL_WIDTH) {
-            if (level.getRemainingBags() == 0) {
+            if (level.getRemainingCollectibles() == 0) {
                 return BoundaryResult.NEXT_LEVEL;
             } else {
                 return BoundaryResult.BLOCKED;

@@ -1,25 +1,88 @@
 package view.renderer;
 
 import model.*;
-import model.bag.BrownBag;
-import model.bag.GunBag;
-import model.bag.MethBag;
-import model.bag.MoneyBag;
+import model.collectible.Collectible;
+import model.collectible.Gun;
+import model.collectible.MethBasket;
+import model.collectible.Money;
+
 import model.entity.agent.Agent;
 import model.level.Level;
 import model.level.Tile;
 import model.entity.yogi.YogiBear;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class GameRenderer {
 
-    public void render(Graphics g, Level level, YogiBear yogi, GameModel gameModel) {
+    private BufferedImage yogiSprite;
+    private BufferedImage[][] yogiAnimations;
+
+    private BufferedImage agentSprite;
+    private BufferedImage[][] agentAnimations;
+
+    private BufferedImage collectibleSprite;
+    private BufferedImage[][] collectibleSubImages;
+
+    public GameRenderer() {
+        loadSprites();
+        loadAllSubImages();
+    }
+
+    public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
         renderTiles(g, level);
-        renderBags(g, level);
+        renderCollectibles(g, level);
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
+    }
+
+    private void loadSprites() {
+        yogiSprite = loadSprite(YogiBear.spritePath);
+        agentSprite = loadSprite(Agent.spritePath);
+        collectibleSprite = loadSprite(Collectible.spritePath);
+    }
+
+    private BufferedImage loadSprite(String path) {
+        try {
+            File spriteFile = new File(path);
+            if (spriteFile.exists()) {
+                return ImageIO.read(spriteFile);
+            } else {
+                System.err.println("Sprite not found: " + spriteFile.getAbsolutePath());
+                return null;
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load sprite: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void loadAllSubImages() {
+        yogiAnimations = new BufferedImage[YogiBear.ANIMATION_COUNT][YogiBear.MAX_FRAMES];
+        loadSubImages(yogiAnimations, yogiSprite, YogiBear.SPRITE_WIDTH, YogiBear.SPRITE_HEIGHT);
+
+        agentAnimations = new BufferedImage[Agent.ANIMATION_COUNT][Agent.MAX_FRAMES];
+        loadSubImages(agentAnimations, agentSprite, Agent.SPRITE_WIDTH, Agent.SPRITE_HEIGHT);
+
+        collectibleSubImages = new BufferedImage[Collectible.COLLECTIBLE_COUNT][Collectible.MAX_FRAMES];
+        loadSubImages(collectibleSubImages, collectibleSprite, Collectible.SPRITE_WIDTH, Collectible.SPRITE_HEIGHT);
+    }
+
+    private void loadSubImages(BufferedImage[][] animations, BufferedImage sprite, int spriteWidth, int spriteHeight) {
+        for (int i = 0; i < animations.length; i++) {
+            for (int j = 0; j < animations[i].length; j++) {
+                animations[i][j] = sprite.getSubimage(
+                        j * spriteWidth,
+                        i * spriteHeight,
+                        spriteWidth,
+                        spriteHeight);
+            }
+        }
     }
 
     private void renderTiles(Graphics g, Level level) {
@@ -37,26 +100,112 @@ public class GameRenderer {
         }
     }
 
-    private void renderBags(Graphics g, Level level) {
-        for (BrownBag bag : level.getBags()) {
-            if (!bag.isCollected()) {
-                if (bag instanceof MethBag) g.setColor(Color.CYAN);
-                else if (bag instanceof GunBag) g.setColor(Color.DARK_GRAY);
-                else if (bag instanceof MoneyBag) g.setColor(Color.GREEN);
-                g.fillRect(bag.getX(), bag.getY(), bag.getSize(), bag.getSize());
+    private void renderCollectibles(Graphics g, Level level) {
+        double scale;
+        int scaledHeight;
+        int scaledWidth;
+        BufferedImage sprite;
+
+        for (Collectible collectible : level.getCollectibles()) {
+            if (!collectible.isCollected()) {
+                if (collectible instanceof MethBasket) {
+                    scale = (double) MethBasket.SIZE / Collectible.SPRITE_HEIGHT;
+                    scaledHeight = MethBasket.SIZE;
+                    scaledWidth = (int) (MethBasket.SPRITE_WIDTH * scale);
+                    sprite = collectibleSubImages[Collectible.METH_BASKET][Collectible.DEFAULT_STATE];
+                }
+                else if (collectible instanceof Gun) {
+                    scale = (double) Gun.SIZE / Collectible.SPRITE_HEIGHT;
+                    scaledHeight = Gun.SIZE;
+                    scaledWidth = (int) (Gun.SPRITE_WIDTH * scale);
+                    sprite = collectibleSubImages[Collectible.GUN][Collectible.DEFAULT_STATE];
+                }
+                else {
+                    scale = (double) Money.SIZE / Collectible.SPRITE_HEIGHT;
+                    scaledHeight = Money.SIZE;
+                    scaledWidth = (int) (Money.SPRITE_WIDTH * scale);
+                    sprite = collectibleSubImages[Collectible.MONEY][Collectible.DEFAULT_STATE];
+                }
+
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.drawImage(
+                        sprite,
+                        collectible.getX(), collectible.getY(),
+                        scaledWidth, scaledHeight,
+                        null
+                );
+            } else if (collectible.isCollected() && collectible instanceof Gun) {
+                scale = (double) Gun.SIZE / Collectible.SPRITE_HEIGHT;
+                scaledHeight = Gun.SIZE;
+                scaledWidth = (int) (Gun.SPRITE_WIDTH * scale);
+                sprite = collectibleSubImages[Collectible.GUN][Gun.NO_GUN_STATE];
+
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.drawImage(
+                        sprite,
+                        collectible.getX(), collectible.getY(),
+                        scaledWidth, scaledHeight,
+                        null
+                );
             }
         }
     }
 
     private void renderYogi(Graphics g, YogiBear yogi) {
-        g.setColor(new Color(139, 90, 43));
-        g.fillRect(yogi.getX(), yogi.getY(), yogi.getWidth(), yogi.getHeight());
+        double scale;
+        int scaledHeight;
+        int yogiY;
+
+        if (!yogi.isCrouching()) {
+            scale = (double) yogi.getHeight() / YogiBear.SPRITE_HEIGHT;
+            scaledHeight = yogi.getHeight();
+            yogiY = yogi.getY();
+        } else {
+            scale = (double) yogi.getHeight() * 2 / YogiBear.SPRITE_HEIGHT;
+            scaledHeight = yogi.getHeight() * 2;
+            yogiY = yogi.getY() - GameConfig.TILE_SIZE;
+        }
+
+        int scaledWidth = (int) (YogiBear.SPRITE_WIDTH * scale);
+        int action = yogi.getAction();
+        BufferedImage sprite = yogiAnimations[action][yogi.getAnimationIndex()];
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        if (!yogi.isFacingRight()) {
+            g2d.drawImage(sprite,
+                    yogi.getX() + scaledWidth, yogiY,
+                    -scaledWidth, scaledHeight,
+                    null);
+        } else {
+            g2d.drawImage(sprite,
+                    yogi.getX(), yogiY,
+                    scaledWidth, scaledHeight,
+                    null);
+        }
     }
 
     private void renderAgents(Graphics g, Level level) {
-        g.setColor(new Color(139, 0, 0));
+        double scale = (double) Agent.HEIGHT / Agent.SPRITE_HEIGHT;
+        int scaledHeight = Agent.HEIGHT;
+        int scaledWidth = (int) (Agent.SPRITE_WIDTH * scale);
+
         for (Agent agent : level.getAgents()) {
-            g.fillRect(agent.getX(), agent.getY(), agent.getWidth(), agent.getHeight());
+            int action = agent.getAction();
+            BufferedImage sprite = agentAnimations[action][agent.getAnimationIndex()];
+            Graphics2D g2d = (Graphics2D) g;
+
+            if (agent.isFacingRight()) {
+                g2d.drawImage(sprite,
+                        agent.getX(), agent.getY(),
+                        scaledWidth, scaledHeight,
+                        null);
+            } else {
+                g2d.drawImage(sprite,
+                        agent.getX() + scaledWidth, agent.getY(),
+                        -scaledWidth, scaledHeight,
+                        null);
+            }
         }
     }
 

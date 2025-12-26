@@ -1,10 +1,10 @@
 package model.level;
 
-import model.bag.BrownBag;
+import model.collectible.Collectible;
 import model.GameConfig;
-import model.bag.GunBag;
-import model.bag.MethBag;
-import model.bag.MoneyBag;
+import model.collectible.Gun;
+import model.collectible.MethBasket;
+import model.collectible.Money;
 import model.entity.agent.Agent;
 import model.entity.agent.AgentSpawn;
 
@@ -18,7 +18,7 @@ public class LevelLoader {
 
     private static class LevelData {
         List<Tile> tiles = new ArrayList<>();
-        List<BrownBag> bags = new ArrayList<>();
+        List<Collectible> collectibles = new ArrayList<>();
         List<Agent> agents = new ArrayList<>();
         List<AgentSpawn> agentSpawns = new ArrayList<>();
         int yogiStartX = 0;
@@ -34,7 +34,7 @@ public class LevelLoader {
             System.err.println("Error loading level: " + e.getMessage());
         }
 
-        return new Level(data.tiles, data.bags, data.agents, data.yogiStartX, data.yogiStartY);
+        return new Level(data.tiles, data.collectibles, data.agents, data.yogiStartX, data.yogiStartY);
     }
 
     private static void parseLevelFile(BufferedReader br, LevelData data) throws IOException {
@@ -75,10 +75,10 @@ public class LevelLoader {
                 data.yogiStartX = x;
                 data.yogiStartY = y;
                 return Tile.Type.AIR;
-            case BAG:
-                if (c == '*') data.bags.add(new MethBag(x, y));
-                else if (c == '~') data.bags.add(new GunBag(x, y));
-                else if (c == '$') data.bags.add(new MoneyBag(x, y));
+            case COLLECTIBLE:
+                if (c == '*') data.collectibles.add(new MethBasket(x, y));
+                else if (c == '~') data.collectibles.add(new Gun(x, y));
+                else if (c == '$') data.collectibles.add(new Money(x, y));
                 return Tile.Type.AIR;
             case AGENT_SPAWN:
                 data.agentSpawns.add(new AgentSpawn(x, y));
@@ -119,7 +119,7 @@ public class LevelLoader {
             case '=' -> Tile.Type.PLATFORM;
             case '_' -> Tile.Type.GROUND;
             case 'Y' -> Tile.Type.SPAWN_POINT;
-            case '*', '~', '$' -> Tile.Type.BAG;
+            case '*', '~', '$' -> Tile.Type.COLLECTIBLE;
             case 'A' -> Tile.Type.AGENT_SPAWN;
             default -> Tile.Type.AIR;
         };
