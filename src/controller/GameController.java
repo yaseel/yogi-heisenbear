@@ -34,7 +34,7 @@ public class GameController {
     }
 
     private void loadLevel(int levelNumber) {
-        level = LevelLoader.loadLevel("src/resources/levels/level" + levelNumber + ".txt");
+        level = LevelLoader.loadLevel(levelNumber);
     }
 
     private void loadNextLevel() {

@@ -8,7 +8,7 @@ import model.collectible.Money;
 
 import model.entity.agent.Agent;
 import model.level.Level;
-import model.level.Tile;
+import model.level.tile.Tile;
 import model.entity.yogi.YogiBear;
 
 import java.awt.*;
@@ -20,15 +20,20 @@ public class GameRenderer {
     private final BufferedImage[][] yogiAnimations;
     private final BufferedImage[][] agentAnimations;
     private final BufferedImage[][] collectibleSubImages;
+    private final BufferedImage[][] tileSprites;
+    private final BufferedImage background;
 
     public GameRenderer() {
         spriteAtlas = new SpriteAtlas();
         yogiAnimations = spriteAtlas.getYogiAnimations();
         agentAnimations = spriteAtlas.getAgentAnimations();
         collectibleSubImages = spriteAtlas.getCollectibleSubImages();
+        tileSprites = spriteAtlas.getTileSprites();
+        background = spriteAtlas.getBackground();
     }
 
     public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
+        renderBackground(g);
         renderTiles(g, level);
         renderCollectibles(g, level);
         renderYogi(g, yogi);
@@ -36,17 +41,15 @@ public class GameRenderer {
         renderUI(g, gameModel);
     }
 
+    private void renderBackground(Graphics g) {
+        g.drawImage(background, 0, 0, GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT, null);
+    }
+
     private void renderTiles(Graphics g, Level level) {
         for (Tile tile : level.getTiles()) {
-            if (tile.getType() == Tile.Type.WALL) {
-                g.setColor(new Color(101, 67, 33));
-                g.fillRect(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
-            } else if (tile.getType() == Tile.Type.PLATFORM) {
-                g.setColor(new Color(139, 69, 19));
-                g.fillRect(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
-            } else if (tile.getType() == Tile.Type.GROUND) {
-                g.setColor(new Color(90, 60, 30));
-                g.fillRect(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
+            if (tile.getType() != Tile.Type.AIR) {
+                BufferedImage tileSprite = tileSprites[tile.getSpriteIndex()][tile.getVariant()];
+                g.drawImage(tileSprite, tile.getX(), tile.getY(), tile.getSize(), tile.getSize(), null);
             }
         }
     }

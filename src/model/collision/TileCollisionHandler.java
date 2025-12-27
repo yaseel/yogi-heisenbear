@@ -2,7 +2,7 @@ package model.collision;
 
 import model.GameConfig;
 import model.level.Level;
-import model.level.Tile;
+import model.level.tile.Tile;
 import model.entity.yogi.YogiBear;
 
 import java.awt.Rectangle;

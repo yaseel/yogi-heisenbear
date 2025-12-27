@@ -23,7 +23,7 @@ public class Agent extends Entity {
     public static final int WIDTH = GameConfig.TILE_SIZE * TILE_WIDTH;
     public static final int HEIGHT = GameConfig.TILE_SIZE * TILE_HEIGHT;
 
-    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "agent.png";
+    public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "agent.png";
 
     private int startX, startY;
     private int patrolStartCol;

@@ -2,6 +2,7 @@ package model.level;
 
 import model.collectible.Collectible;
 import model.entity.agent.Agent;
+import model.level.tile.Tile;
 
 import java.util.List;
 

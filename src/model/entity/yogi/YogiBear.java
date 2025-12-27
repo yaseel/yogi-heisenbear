@@ -6,7 +6,7 @@ import model.entity.Entity;
 import java.awt.*;
 
 public class YogiBear extends Entity {
-    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "yogi.png";
+    public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "yogi.png";
 
     public static final int IDLE = 0;
     public static final int WALK = 1;

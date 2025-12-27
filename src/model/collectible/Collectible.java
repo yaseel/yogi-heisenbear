@@ -5,7 +5,7 @@ import model.GameConfig;
 import java.awt.*;
 
 public abstract class Collectible {
-    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "collectible.png";
+    public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "collectible.png";
 
     public static final int GUN = 0;
     public static final int METH_BASKET = 1;
