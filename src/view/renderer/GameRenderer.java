@@ -119,7 +119,7 @@ public class GameRenderer {
         } else {
             scale = (double) yogi.getHeight() * 2 / YogiBear.SPRITE_HEIGHT;
             scaledHeight = yogi.getHeight() * 2;
-            int scaledOffset = (YogiBear.TILE_HEIGHT - 1) * GameConfig.ENTITY_SCALE;
+            int scaledOffset = YogiBear.TILE_HEIGHT - 1;
             yogiY = yogi.getY() - GameConfig.TILE_SIZE * scaledOffset;
         }
 

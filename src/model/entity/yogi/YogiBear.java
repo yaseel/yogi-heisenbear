@@ -1,6 +1,7 @@
 package model.entity.yogi;
 
 import model.GameConfig;
+import model.collision.CollisionHelper;
 import model.entity.Entity;
 
 import java.awt.*;
@@ -28,13 +29,14 @@ public class YogiBear extends Entity {
     private boolean dropThroughPlatform;
 
     private int width, height;
+    private int[][] levelData;
 
     public YogiBear(int x, int y) {
         super(x, y);
         this.onGround = false;
         this.crouching = false;
-        this.width = GameConfig.TILE_SIZE * TILE_WIDTH * GameConfig.ENTITY_SCALE;
-        this.height = GameConfig.TILE_SIZE * TILE_HEIGHT * GameConfig.ENTITY_SCALE;
+        this.width = GameConfig.TILE_SIZE * TILE_WIDTH;
+        this.height = GameConfig.TILE_SIZE * TILE_HEIGHT;
         this.hitbox = new Rectangle(x, y, width, height);
     }
 
@@ -91,16 +93,33 @@ public class YogiBear extends Entity {
 
     @Override
     public void update() {
-        x += velocityX;
-
-        // keep yogi within level bounds
-        if (x < 0)
-            x = 0;
-        if (x > GameConfig.LEVEL_WIDTH - width)
-            x = GameConfig.LEVEL_WIDTH - width;
-
         velocityY += GameConfig.GRAVITY;
-        y += velocityY;
+
+        int newY = y + velocityY;
+        if (CollisionHelper.canMoveHere(x, newY, width, height, levelData, this)) {
+            y = newY;
+            onGround = false;
+        } else {
+            y = CollisionHelper.getEntityYPosUnderRoofOrAboveFloor(y, height, velocityY);
+            if (velocityY > 0) {
+                onGround = true;
+                clearDropThrough();
+            }
+            velocityY = 0;
+        }
+
+        if (velocityX != 0) {
+            int newX = x + velocityX;
+            if (CollisionHelper.canMoveHere(newX, y, width, height, levelData, this)) {
+                x = newX;
+            }
+        }
+
+        if (!onGround && velocityY == 0) {
+            if (!CollisionHelper.isEntityOnFloor(getHitbox(), levelData, this)) {
+                onGround = false;
+            }
+        }
 
         updateHitbox();
         updateAction();
@@ -198,10 +217,22 @@ public class YogiBear extends Entity {
     }
 
     public boolean isJumping() {
-        return (this.velocityY < 0);
+        return velocityY < 0;
     }
 
     public boolean isFalling() {
-        return (this.velocityY > 0);
+        return velocityY > 0;
+    }
+
+    public void setLevelData(int[][] levelData) {
+        this.levelData = levelData;
+    }
+
+    public boolean canStandUp() {
+        if (!crouching)
+            return true;
+        int standingHeight = height * 2;
+        int standingY = y - (standingHeight - height);
+        return CollisionHelper.canMoveHere(x, standingY, width, standingHeight, levelData, this);
     }
 }
