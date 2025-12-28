@@ -5,8 +5,10 @@ public class GameConfig {
     public static final int ANIMATION_SPEED = 15;
 
     public static final int TILE_SIZE = 32;
-    public static final int LEVEL_HEIGHT = 25 * TILE_SIZE;
-    public static final int LEVEL_WIDTH = 50 * TILE_SIZE;
+    public static final int LEVEL_HEIGHT = 15 * TILE_SIZE;
+    public static final int LEVEL_WIDTH = 30 * TILE_SIZE;
+
+    public static final double WINDOW_SCALE = 1.5;
 
     public static final int MOVE_SPEED = 5;
     public static final int GRAVITY = 1;

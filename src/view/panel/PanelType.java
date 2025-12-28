@@ -1,5 +1,5 @@
 package view.panel;
 
 public enum PanelType {
-    GAME, MENU
+    GAME, MENU, LEADERBOARD
 }

@@ -22,6 +22,7 @@ public class GameRenderer {
     private final BufferedImage[][] collectibleSubImages;
     private final BufferedImage[][] tileSprites;
     private final BufferedImage background;
+    private final BufferedImage heartSprite;
 
     public GameRenderer() {
         spriteAtlas = new SpriteAtlas();
@@ -30,6 +31,7 @@ public class GameRenderer {
         collectibleSubImages = spriteAtlas.getCollectibleSubImages();
         tileSprites = spriteAtlas.getTileSprites();
         background = spriteAtlas.getBackground();
+        heartSprite = spriteAtlas.getHeartSprite();
     }
 
     public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
@@ -167,10 +169,21 @@ public class GameRenderer {
     }
 
     private void renderUI(Graphics g, GameModel gameModel) {
+        if (heartSprite != null) {
+            int heartSize = 30;
+            int heartSpacing = 40;
+            int startX = 10;
+            int startY = 10;
+
+            for (int i = 0; i < gameModel.getLives(); i++) {
+                g.drawImage(heartSprite, startX + (i * heartSpacing), startY, heartSize, heartSize, null);
+            }
+        }
+
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Score: " + gameModel.getScore(), 10, 25);
-        g.drawString("Lives: " + gameModel.getLives(), 10, 50);
+        g.drawString("Score: " + gameModel.getScore(), 10, 60);
+        g.drawString("Time: " + gameModel.getFormattedTime(), 10, 85);
     }
 
     public void renderMessage(Graphics g, String message, int alpha, int width, int height) {

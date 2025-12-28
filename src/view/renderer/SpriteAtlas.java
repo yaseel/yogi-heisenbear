@@ -26,6 +26,7 @@ public class SpriteAtlas {
     private BufferedImage[][] tileSprites;
 
     private BufferedImage background;
+    private BufferedImage heartSprite;
 
     public SpriteAtlas() {
         loadSprites();
@@ -38,6 +39,7 @@ public class SpriteAtlas {
         collectibleSprite = loadSprite(Collectible.SPRITE_PATH);
         tileSprite = loadSprite(Tile.SPRITE_PATH);
         background = loadSprite(GameConfig.BASE_SPRITE_PATH + "background.png");
+        heartSprite = loadSprite(GameConfig.BASE_SPRITE_PATH + "heart.png");
     }
 
     private BufferedImage loadSprite(String path) {
@@ -100,5 +102,9 @@ public class SpriteAtlas {
 
     public BufferedImage getBackground() {
         return background;
+    }
+
+    public BufferedImage getHeartSprite() {
+        return heartSprite;
     }
 }

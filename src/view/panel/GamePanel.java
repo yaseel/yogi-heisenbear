@@ -14,7 +14,9 @@ public class GamePanel extends JPanel {
     private MenuController menuController;
 
     public GamePanel() {
-        setPreferredSize(new Dimension(GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT));
+        setPreferredSize(new Dimension(
+                (int) (GameConfig.LEVEL_WIDTH * GameConfig.WINDOW_SCALE),
+                (int) (GameConfig.LEVEL_HEIGHT * GameConfig.WINDOW_SCALE)));
         setBackground(new Color(135, 206, 235));
         setFocusable(true);
 
@@ -28,6 +30,10 @@ public class GamePanel extends JPanel {
 
     public void setMenuController(MenuController menuController) {
         this.menuController = menuController;
+    }
+
+    public GameController getGameController() {
+        return gameController;
     }
 
     private void startGameLoop() {

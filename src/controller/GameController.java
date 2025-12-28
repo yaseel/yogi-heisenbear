@@ -3,6 +3,8 @@ package controller;
 import model.*;
 import model.collectible.Collectible;
 import model.entity.agent.Agent;
+import model.leaderboard.LeaderboardEntry;
+import model.leaderboard.LeaderboardManager;
 import model.level.Level;
 import model.level.LevelLoader;
 import model.entity.yogi.YogiBear;
@@ -22,12 +24,14 @@ public class GameController {
     private int currentLevelNumber = 1;
     private boolean gameOver = false;
     private boolean gameFinished = false;
+    private String playerName = "Player";
 
     public GameController() {
         loadLevel(currentLevelNumber);
         yogi = new YogiBear(level.getYogiStartX(), level.getYogiStartY());
         yogi.setLevelData(level.getLevelData());
         gameModel = new GameModel();
+        gameModel.startTimer();
         stateManager = new GameStateManager(level, yogi, gameModel);
         inputHandler = new InputHandler(yogi);
     }
@@ -49,6 +53,7 @@ public class GameController {
         yogi.setOnGround(false);
         yogi.setLevelData(level.getLevelData());
 
+        gameModel.startTimer();
         stateManager = new GameStateManager(level, yogi, gameModel);
         inputHandler.clearAllKeys();
     }
@@ -101,10 +106,17 @@ public class GameController {
         }
 
         if (stateManager.isGameOver() && !stateManager.isShowingMessage()) {
+            gameModel.stopTimer();
             gameOver = true;
         }
 
         if (stateManager.isGameFinished() && !stateManager.isShowingMessage()) {
+            gameModel.stopTimer();
+            LeaderboardEntry entry = new LeaderboardEntry(
+                    playerName,
+                    gameModel.getScore(),
+                    gameModel.getElapsedTime());
+            LeaderboardManager.saveEntry(entry);
             gameFinished = true;
         }
     }
@@ -125,6 +137,10 @@ public class GameController {
         resetLevelState();
         gameOver = false;
         gameFinished = false;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName != null && !playerName.trim().isEmpty() ? playerName : "Player";
     }
 
     public YogiBear getYogi() {
