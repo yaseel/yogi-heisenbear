@@ -33,8 +33,9 @@ public class YogiBear extends Entity {
         super(x, y);
         this.onGround = false;
         this.crouching = false;
-        this.width = (int) (GameConfig.TILE_SIZE * TILE_WIDTH * GameConfig.ENTITY_SCALE);
-        this.height = (int) (GameConfig.TILE_SIZE * TILE_HEIGHT * GameConfig.ENTITY_SCALE);
+        this.width = GameConfig.TILE_SIZE * TILE_WIDTH * GameConfig.ENTITY_SCALE;
+        this.height = GameConfig.TILE_SIZE * TILE_HEIGHT * GameConfig.ENTITY_SCALE;
+        this.hitbox = new Rectangle(x, y, width, height);
     }
 
     public void crouch() {
@@ -101,6 +102,7 @@ public class YogiBear extends Entity {
         velocityY += GameConfig.GRAVITY;
         y += velocityY;
 
+        updateHitbox();
         updateAction();
         updateJumpAnimation();
         updateAnimationTick();
@@ -135,7 +137,7 @@ public class YogiBear extends Entity {
     }
 
     @Override
-    public Rectangle getBounds() {
+    public Rectangle getHitbox() {
         return new Rectangle(x, y, width, height);
     }
 

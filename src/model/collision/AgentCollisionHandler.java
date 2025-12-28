@@ -16,11 +16,11 @@ public class AgentCollisionHandler {
     }
 
     public boolean checkAgentCollisions() {
-        Rectangle yogiBounds = yogi.getBounds();
+        Rectangle yogiBounds = yogi.getHitbox();
         boolean caught = false;
 
         for (Agent agent : level.getAgents()) {
-            if (!caught && yogiBounds.intersects(agent.getBounds())) {
+            if (!caught && yogiBounds.intersects(agent.getHitbox())) {
                 caught = true;
             }
             if (!caught && agent.canSeeYogi(yogi)) {

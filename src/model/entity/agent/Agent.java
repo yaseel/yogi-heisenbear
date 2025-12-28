@@ -20,8 +20,8 @@ public class Agent extends Entity {
     public static final int TILE_WIDTH = 1;
     public static final int TILE_HEIGHT = 2;
 
-    public static final int WIDTH = (int) (GameConfig.TILE_SIZE * TILE_WIDTH * GameConfig.ENTITY_SCALE);
-    public static final int HEIGHT = (int) (GameConfig.TILE_SIZE * TILE_HEIGHT * GameConfig.ENTITY_SCALE);
+    public static final int WIDTH = GameConfig.TILE_SIZE * TILE_WIDTH * GameConfig.ENTITY_SCALE;
+    public static final int HEIGHT = GameConfig.TILE_SIZE * TILE_HEIGHT * GameConfig.ENTITY_SCALE;
 
     public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "agent.png";
 
@@ -107,7 +107,7 @@ public class Agent extends Entity {
     }
 
     @Override
-    public Rectangle getBounds() {
+    public Rectangle getHitbox() {
         return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 

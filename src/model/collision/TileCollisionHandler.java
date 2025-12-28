@@ -33,7 +33,7 @@ public class TileCollisionHandler {
 
     // returns true if yogi landed on this tile
     private boolean checkTileCollision(Tile tile) {
-        Rectangle yogiBounds = yogi.getBounds();
+        Rectangle yogiBounds = yogi.getHitbox();
         Rectangle tileBounds = new Rectangle(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
 
         if (!yogiBounds.intersects(tileBounds)) {

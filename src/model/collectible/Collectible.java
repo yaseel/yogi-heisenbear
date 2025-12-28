@@ -20,7 +20,7 @@ public abstract class Collectible {
     public static final int SPRITE_HEIGHT = 250;
 
     public static final int TILE_SIZE_COUNT = 1;
-    public static final int SIZE = (int) (GameConfig.TILE_SIZE * TILE_SIZE_COUNT * GameConfig.ENTITY_SCALE);
+    public static final int SIZE = GameConfig.TILE_SIZE * TILE_SIZE_COUNT * GameConfig.ENTITY_SCALE;
 
     protected int x, y;
     protected int value;

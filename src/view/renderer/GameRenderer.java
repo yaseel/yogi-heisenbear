@@ -39,6 +39,12 @@ public class GameRenderer {
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
+        renderHitbox(g, yogi.getHitbox());
+    }
+
+    private void renderHitbox(Graphics g, Rectangle hitbox) {
+        g.setColor(Color.RED);
+        g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
 
     private void renderBackground(Graphics g) {
@@ -102,9 +108,9 @@ public class GameRenderer {
     }
 
     private void renderYogi(Graphics g, YogiBear yogi) {
-        double scale;
-        int scaledHeight;
         int yogiY;
+        int scaledWidth, scaledHeight;
+        double scale;
 
         if (!yogi.isCrouching()) {
             scale = (double) yogi.getHeight() / YogiBear.SPRITE_HEIGHT;
@@ -113,10 +119,11 @@ public class GameRenderer {
         } else {
             scale = (double) yogi.getHeight() * 2 / YogiBear.SPRITE_HEIGHT;
             scaledHeight = yogi.getHeight() * 2;
-            yogiY = yogi.getY() - GameConfig.TILE_SIZE * (YogiBear.TILE_HEIGHT - 2);
+            int scaledOffset = (YogiBear.TILE_HEIGHT - 1) * GameConfig.ENTITY_SCALE;
+            yogiY = yogi.getY() - GameConfig.TILE_SIZE * scaledOffset;
         }
 
-        int scaledWidth = (int) (YogiBear.SPRITE_WIDTH * scale);
+        scaledWidth = (int) (YogiBear.SPRITE_WIDTH * scale);
         int action = yogi.getAction();
         BufferedImage sprite = yogiAnimations[action][yogi.getAnimationIndex()];
 

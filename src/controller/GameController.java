@@ -106,7 +106,7 @@ public class GameController {
 
     private void checkCollection() {
         for (Collectible collectible : level.getCollectibles()) {
-            if (!collectible.isCollected() && yogi.getBounds().intersects(collectible.getBounds())) {
+            if (!collectible.isCollected() && yogi.getHitbox().intersects(collectible.getBounds())) {
                 collectible.collect();
                 stateManager.onCollect(collectible);
             }

@@ -2,12 +2,13 @@ package model.entity;
 
 import model.GameConfig;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 public abstract class Entity {
     protected int x, y;
     protected int velocityX, velocityY;
     protected int action;
+    protected Rectangle hitbox;
 
     protected int animationTick = 0;
     protected int animationIndex = 0;
@@ -39,7 +40,14 @@ public abstract class Entity {
         }
     }
 
-    public abstract Rectangle getBounds();
+    protected void updateHitbox() {
+        hitbox.x = x;
+        hitbox.y = y;
+    }
+
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
 
     public int getX() {
         return x;
