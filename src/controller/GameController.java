@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import model.collectible.Collectible;
+import model.collision.BoundaryHandler;
 import model.entity.agent.Agent;
 import model.leaderboard.LeaderboardEntry;
 import model.leaderboard.LeaderboardManager;
@@ -72,17 +73,7 @@ public class GameController {
 
             Rectangle yogiBox = yogi.getHitbox();
 
-            if (yogiBox.y + yogiBox.height > GameConfig.LEVEL_HEIGHT) {
-                stateManager.onFell();
-            }
-
-            if (yogiBox.x + yogiBox.width >= GameConfig.LEVEL_WIDTH) {
-                if (level.getRemainingCollectibles() == 0) {
-                    stateManager.onLevelComplete();
-                } else {
-                    stateManager.onBlocked();
-                }
-            }
+            BoundaryHandler.checkBoundaries(yogiBox, level, stateManager);
 
             for (Agent agent : level.getAgents()) {
                 if (yogiBox.intersects(agent.getHitbox())) {

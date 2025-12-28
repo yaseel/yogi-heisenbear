@@ -2,6 +2,7 @@ package model.level;
 
 import model.GameConfig;
 import model.collectible.Collectible;
+import model.collectible.MethBasket;
 import model.entity.agent.Agent;
 import model.level.tile.Tile;
 
@@ -45,7 +46,7 @@ public class Level {
     public int getRemainingCollectibles() {
         int count = 0;
         for (Collectible collectible : collectibles) {
-            if (!collectible.isCollected()) {
+            if (!collectible.isCollected() && collectible instanceof MethBasket) {
                 count++;
             }
         }

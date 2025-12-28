@@ -37,10 +37,12 @@ public class CollisionHelper {
 
     private static boolean isSolid(int x, int y, int[][] levelData, YogiBear yogi) {
         int maxWidth = levelData[0].length * GameConfig.TILE_SIZE;
-        if (x < 0 || x >= maxWidth)
+        if (x < 0)
             return true;
-        if (y < 0 || y >= GameConfig.LEVEL_HEIGHT)
+        if (y < 0)
             return true;
+        if (x >= maxWidth || y >= GameConfig.LEVEL_HEIGHT)
+            return false;
 
         int xTile = x / GameConfig.TILE_SIZE;
         int yTile = y / GameConfig.TILE_SIZE;

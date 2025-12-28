@@ -47,6 +47,9 @@ public class InputHandler extends KeyAdapter {
             yogi.requestDropThrough();
         } else {
             yogi.standUp(yogi.canStandUp());
+            if (yogi.canClearDropThrough()) {
+                yogi.clearDropThrough();
+            }
         }
 
         if (!moving) {

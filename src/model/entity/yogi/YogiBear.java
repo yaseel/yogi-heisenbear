@@ -27,6 +27,7 @@ public class YogiBear extends Entity {
     private boolean onGround;
     private boolean crouching;
     private boolean dropThroughPlatform;
+    private int dropStartY;
 
     private int width, height;
     private int[][] levelData;
@@ -201,6 +202,9 @@ public class YogiBear extends Entity {
     }
 
     public void requestDropThrough() {
+        if (!dropThroughPlatform) {
+            dropStartY = y;
+        }
         dropThroughPlatform = true;
     }
 
@@ -210,6 +214,10 @@ public class YogiBear extends Entity {
 
     public void clearDropThrough() {
         dropThroughPlatform = false;
+    }
+
+    public boolean canClearDropThrough() {
+        return y > dropStartY + GameConfig.TILE_SIZE;
     }
 
     public void setOnGround(boolean onGround) {
