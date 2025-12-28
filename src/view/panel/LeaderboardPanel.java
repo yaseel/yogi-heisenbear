@@ -1,11 +1,9 @@
 package view.panel;
 
 import model.leaderboard.LeaderboardEntry;
-import model.leaderboard.LeaderboardManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class LeaderboardPanel extends JPanel {
     private JButton backButton;
@@ -39,11 +37,10 @@ public class LeaderboardPanel extends JPanel {
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        loadLeaderboard();
+        updateLeaderboard(java.util.Collections.emptyList());
     }
 
-    public void loadLeaderboard() {
-        List<LeaderboardEntry> entries = LeaderboardManager.getTopEntries(10);
+    public void updateLeaderboard(java.util.List<LeaderboardEntry> entries) {
 
         Object[][] data = new Object[10][4];
         for (int i = 0; i < 10; i++) {

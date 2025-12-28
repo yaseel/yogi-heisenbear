@@ -8,12 +8,12 @@ import view.panel.PanelType;
 public class MenuController {
     private final GameFrame gameFrame;
     private final GamePanel gamePanel;
-    private final LeaderboardPanel leaderboardPanel;
+    private final LeaderboardController leaderboardController;
 
     public MenuController(GameFrame gameFrame, GamePanel gamePanel, LeaderboardPanel leaderboardPanel) {
         this.gameFrame = gameFrame;
         this.gamePanel = gamePanel;
-        this.leaderboardPanel = leaderboardPanel;
+        this.leaderboardController = new LeaderboardController(leaderboardPanel);
     }
 
     public void onStartGame() {
@@ -22,7 +22,7 @@ public class MenuController {
     }
 
     public void onShowLeaderboard() {
-        leaderboardPanel.loadLeaderboard();
+        leaderboardController.refreshLeaderboard();
         gameFrame.showPanel(PanelType.LEADERBOARD);
     }
 

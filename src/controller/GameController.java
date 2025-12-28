@@ -4,8 +4,6 @@ import model.*;
 import model.collectible.Collectible;
 import model.collision.BoundaryHandler;
 import model.entity.agent.Agent;
-import model.leaderboard.LeaderboardEntry;
-import model.leaderboard.LeaderboardManager;
 import model.level.Level;
 import model.level.LevelLoader;
 import model.entity.yogi.YogiBear;
@@ -26,6 +24,7 @@ public class GameController {
     private boolean gameOver = false;
     private boolean gameFinished = false;
     private String playerName = "Player";
+    private LeaderboardController leaderboardController;
 
     public GameController() {
         loadLevel(currentLevelNumber);
@@ -35,6 +34,7 @@ public class GameController {
         gameModel.startTimer();
         stateManager = new GameStateManager(level, yogi, gameModel);
         inputHandler = new InputHandler(yogi);
+        leaderboardController = new LeaderboardController(null);
     }
 
     private void loadLevel(int levelNumber) {
@@ -54,7 +54,6 @@ public class GameController {
         yogi.setOnGround(false);
         yogi.setLevelData(level.getLevelData());
 
-        gameModel.startTimer();
         stateManager = new GameStateManager(level, yogi, gameModel);
         inputHandler.clearAllKeys();
     }
@@ -89,6 +88,8 @@ public class GameController {
             if (currentLevelNumber >= GameConfig.LAST_LEVEL_NUM) {
                 stateManager.onGameFinished();
                 stateManager.resetLevelCompleteFlag();
+                gameModel.stopTimer();
+                leaderboardController.saveEntry(playerName, gameModel.getScore(), gameModel.getElapsedTime());
                 gameFinished = true;
             } else {
                 loadNextLevel();
@@ -99,16 +100,6 @@ public class GameController {
         if (stateManager.isGameOver() && !stateManager.isShowingMessage()) {
             gameModel.stopTimer();
             gameOver = true;
-        }
-
-        if (stateManager.isGameFinished() && !stateManager.isShowingMessage()) {
-            gameModel.stopTimer();
-            LeaderboardEntry entry = new LeaderboardEntry(
-                    playerName,
-                    gameModel.getScore(),
-                    gameModel.getElapsedTime());
-            LeaderboardManager.saveEntry(entry);
-            gameFinished = true;
         }
     }
 
