@@ -8,6 +8,7 @@ import model.collectible.Money;
 
 import model.entity.agent.Agent;
 import model.level.Level;
+import model.level.LevelLoader;
 import model.level.tile.Tile;
 import model.entity.yogi.YogiBear;
 
@@ -26,6 +27,7 @@ public class GameRenderer {
 
     public GameRenderer() {
         spriteAtlas = new SpriteAtlas();
+        LevelLoader.setSpriteAtlas(spriteAtlas);
         yogiAnimations = spriteAtlas.getYogiAnimations();
         agentAnimations = spriteAtlas.getAgentAnimations();
         collectibleSubImages = spriteAtlas.getCollectibleSubImages();

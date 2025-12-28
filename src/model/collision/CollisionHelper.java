@@ -41,7 +41,9 @@ public class CollisionHelper {
             return true;
         if (y < 0)
             return true;
-        if (x >= maxWidth || y >= GameConfig.LEVEL_HEIGHT)
+        if (x >= maxWidth)
+            return true;
+        if (y >= GameConfig.LEVEL_HEIGHT)
             return false;
 
         int xTile = x / GameConfig.TILE_SIZE;

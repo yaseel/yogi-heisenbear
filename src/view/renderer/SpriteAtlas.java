@@ -27,6 +27,8 @@ public class SpriteAtlas {
 
     private BufferedImage background;
     private BufferedImage heartSprite;
+    private BufferedImage levelsSprite;
+    private BufferedImage[][] levelSprites;
 
     public SpriteAtlas() {
         loadSprites();
@@ -40,6 +42,7 @@ public class SpriteAtlas {
         tileSprite = loadSprite(Tile.SPRITE_PATH);
         background = loadSprite(GameConfig.BASE_SPRITE_PATH + "background.png");
         heartSprite = loadSprite(GameConfig.BASE_SPRITE_PATH + "heart.png");
+        levelsSprite = loadSprite(GameConfig.BASE_SPRITE_PATH + "levels.png");
     }
 
     private BufferedImage loadSprite(String path) {
@@ -66,6 +69,11 @@ public class SpriteAtlas {
 
         tileSprites = new BufferedImage[Tile.TILE_COUNT][Tile.MAX_TILE_VARIANTS];
         loadSubImages(tileSprites, tileSprite, Tile.SPRITE_SIZE, Tile.SPRITE_SIZE);
+
+        int levelTileWidth = GameConfig.LEVEL_WIDTH / GameConfig.TILE_SIZE;
+        int levelTileHeight = GameConfig.LEVEL_HEIGHT / GameConfig.TILE_SIZE;
+        levelSprites = new BufferedImage[GameConfig.LAST_LEVEL_NUM][2];
+        loadSubImages(levelSprites, levelsSprite, levelTileWidth, levelTileHeight);
     }
 
     private void loadSubImages(BufferedImage[][] sprites, BufferedImage spriteSheet, int spriteWidth,
@@ -106,5 +114,9 @@ public class SpriteAtlas {
 
     public BufferedImage getHeartSprite() {
         return heartSprite;
+    }
+
+    public BufferedImage[][] getLevelSprites() {
+        return levelSprites;
     }
 }

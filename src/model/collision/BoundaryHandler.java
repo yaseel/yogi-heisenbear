@@ -20,7 +20,7 @@ public class BoundaryHandler {
     }
 
     private static void checkRightBoundary(Rectangle yogiBox, Level level, GameStateManager stateManager) {
-        if (yogiBox.x + yogiBox.width >= GameConfig.LEVEL_WIDTH) {
+        if (yogiBox.x + yogiBox.width >= GameConfig.LEVEL_WIDTH - GameConfig.TILE_SIZE) {
             if (level.getRemainingCollectibles() == 0) {
                 stateManager.onLevelComplete();
             } else {

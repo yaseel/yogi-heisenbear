@@ -20,8 +20,8 @@ public class GamePanel extends JPanel {
         setBackground(new Color(135, 206, 235));
         setFocusable(true);
 
-        gameController = new GameController();
         renderer = new GameRenderer();
+        gameController = new GameController();
 
         addKeyListener(gameController.getInputHandler());
 
@@ -48,7 +48,6 @@ public class GamePanel extends JPanel {
     private void update() {
         gameController.update();
 
-        // Handle game state transitions
         if (gameController.isGameOver()) {
             gameController.clearGameOverFlag();
             gameController.resetGame();
@@ -72,7 +71,6 @@ public class GamePanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        // Calculate scale factors
         double scaleX = (double) getWidth() / GameConfig.LEVEL_WIDTH;
         double scaleY = (double) getHeight() / GameConfig.LEVEL_HEIGHT;
 
