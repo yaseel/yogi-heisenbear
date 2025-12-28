@@ -61,15 +61,19 @@ public class OverlayParser {
     private static void handleEntityPixel(int rgb, int x, int y, OverlayData data) {
         if (rgb == (TileType.Colors.YOGI_SPAWN.getRGB() & 0xFFFFFF)) {
             data.yogiStartX = x;
-            data.yogiStartY = y - GameConfig.TILE_SIZE * (YogiBear.TILE_HEIGHT - 1);
+            int scaledHeight = (int) (YogiBear.TILE_HEIGHT * GameConfig.ENTITY_SCALE);
+            data.yogiStartY = y - GameConfig.TILE_SIZE * (scaledHeight - 1);
         } else if (rgb == (TileType.Colors.MONEY.getRGB() & 0xFFFFFF)) {
-            int moneyY = y - GameConfig.TILE_SIZE * (Collectible.TILE_SIZE_COUNT - 1);
+            int scaledSize = (int) (Collectible.TILE_SIZE_COUNT * GameConfig.ENTITY_SCALE);
+            int moneyY = y - GameConfig.TILE_SIZE * (scaledSize - 1);
             data.collectibles.add(new Money(x, moneyY));
         } else if (rgb == (TileType.Colors.METH_BASKET.getRGB() & 0xFFFFFF)) {
-            int basketY = y - GameConfig.TILE_SIZE * (Collectible.TILE_SIZE_COUNT - 1);
+            int scaledSize = (int) (Collectible.TILE_SIZE_COUNT * GameConfig.ENTITY_SCALE);
+            int basketY = y - GameConfig.TILE_SIZE * (scaledSize - 1);
             data.collectibles.add(new MethBasket(x, basketY));
         } else if (rgb == (TileType.Colors.GUN.getRGB() & 0xFFFFFF)) {
-            int gunY = y - GameConfig.TILE_SIZE * (Collectible.TILE_SIZE_COUNT - 1);
+            int scaledSize = (int) (Collectible.TILE_SIZE_COUNT * GameConfig.ENTITY_SCALE);
+            int gunY = y - GameConfig.TILE_SIZE * (scaledSize - 1);
             data.collectibles.add(new Gun(x, gunY));
         }
     }
@@ -112,7 +116,8 @@ public class OverlayParser {
     private static void createAgents(List<PatrolLine> patrolLines, OverlayData data) {
         for (PatrolLine line : patrolLines) {
             int agentX = line.startCol * GameConfig.TILE_SIZE;
-            int agentY = line.row * GameConfig.TILE_SIZE - GameConfig.TILE_SIZE * (Agent.TILE_HEIGHT - 1);
+            int scaledHeight = (int) (Agent.TILE_HEIGHT * GameConfig.ENTITY_SCALE);
+            int agentY = line.row * GameConfig.TILE_SIZE - GameConfig.TILE_SIZE * (scaledHeight - 1);
             data.agents.add(new Agent(agentX, agentY, line.startCol, line.endCol));
         }
     }
