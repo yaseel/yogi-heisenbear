@@ -5,7 +5,7 @@ import model.GameConfig;
 import java.awt.*;
 
 public abstract class Collectible {
-    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "collectible.png";
+    public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "collectible.png";
 
     public static final int GUN = 0;
     public static final int METH_BASKET = 1;
@@ -19,7 +19,7 @@ public abstract class Collectible {
     public static final int SPRITE_WIDTH = 250;
     public static final int SPRITE_HEIGHT = 250;
 
-    public static final int TILE_SIZE_COUNT = 2;
+    public static final int TILE_SIZE_COUNT = 1;
     public static final int SIZE = GameConfig.TILE_SIZE * TILE_SIZE_COUNT;
 
     protected int x, y;

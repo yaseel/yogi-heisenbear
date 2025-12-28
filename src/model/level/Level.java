@@ -1,7 +1,10 @@
 package model.level;
 
+import model.GameConfig;
 import model.collectible.Collectible;
+import model.collectible.MethBasket;
 import model.entity.agent.Agent;
+import model.level.tile.Tile;
 
 import java.util.List;
 
@@ -43,7 +46,7 @@ public class Level {
     public int getRemainingCollectibles() {
         int count = 0;
         for (Collectible collectible : collectibles) {
-            if (!collectible.isCollected()) {
+            if (!collectible.isCollected() && collectible instanceof MethBasket) {
                 count++;
             }
         }
@@ -54,5 +57,27 @@ public class Level {
         for (Agent agent : agents) {
             agent.reset();
         }
+    }
+
+    public int[][] getLevelData() {
+        int cols = GameConfig.LEVEL_WIDTH / GameConfig.TILE_SIZE;
+        int rows = GameConfig.LEVEL_HEIGHT / GameConfig.TILE_SIZE;
+        int[][] data = new int[rows][cols];
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                data[row][col] = -1;
+            }
+        }
+
+        for (Tile tile : tiles) {
+            int col = tile.getX() / GameConfig.TILE_SIZE;
+            int row = tile.getY() / GameConfig.TILE_SIZE;
+            if (row >= 0 && row < rows && col >= 0 && col < cols) {
+                data[row][col] = tile.getType().ordinal();
+            }
+        }
+
+        return data;
     }
 }

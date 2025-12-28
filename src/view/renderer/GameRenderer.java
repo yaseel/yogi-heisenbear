@@ -8,7 +8,8 @@ import model.collectible.Money;
 
 import model.entity.agent.Agent;
 import model.level.Level;
-import model.level.Tile;
+import model.level.LevelLoader;
+import model.level.tile.Tile;
 import model.entity.yogi.YogiBear;
 
 import java.awt.*;
@@ -20,33 +21,45 @@ public class GameRenderer {
     private final BufferedImage[][] yogiAnimations;
     private final BufferedImage[][] agentAnimations;
     private final BufferedImage[][] collectibleSubImages;
+    private final BufferedImage[][] tileSprites;
+    private final BufferedImage background;
+    private final BufferedImage heartSprite;
 
     public GameRenderer() {
         spriteAtlas = new SpriteAtlas();
+        LevelLoader.setSpriteAtlas(spriteAtlas);
         yogiAnimations = spriteAtlas.getYogiAnimations();
         agentAnimations = spriteAtlas.getAgentAnimations();
         collectibleSubImages = spriteAtlas.getCollectibleSubImages();
+        tileSprites = spriteAtlas.getTileSprites();
+        background = spriteAtlas.getBackground();
+        heartSprite = spriteAtlas.getHeartSprite();
     }
 
     public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
+        renderBackground(g);
         renderTiles(g, level);
         renderCollectibles(g, level);
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
+        renderHitbox(g, yogi.getHitbox());
+    }
+
+    private void renderHitbox(Graphics g, Rectangle hitbox) {
+        g.setColor(Color.RED);
+        g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+    }
+
+    private void renderBackground(Graphics g) {
+        g.drawImage(background, 0, 0, GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT, null);
     }
 
     private void renderTiles(Graphics g, Level level) {
         for (Tile tile : level.getTiles()) {
-            if (tile.getType() == Tile.Type.WALL) {
-                g.setColor(new Color(101, 67, 33));
-                g.fillRect(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
-            } else if (tile.getType() == Tile.Type.PLATFORM) {
-                g.setColor(new Color(139, 69, 19));
-                g.fillRect(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
-            } else if (tile.getType() == Tile.Type.GROUND) {
-                g.setColor(new Color(90, 60, 30));
-                g.fillRect(tile.getX(), tile.getY(), tile.getSize(), tile.getSize());
+            if (tile.getType() != Tile.Type.AIR) {
+                BufferedImage tileSprite = tileSprites[tile.getSpriteIndex()][tile.getVariant()];
+                g.drawImage(tileSprite, tile.getX(), tile.getY(), tile.getSize(), tile.getSize(), null);
             }
         }
     }
@@ -99,9 +112,9 @@ public class GameRenderer {
     }
 
     private void renderYogi(Graphics g, YogiBear yogi) {
-        double scale;
-        int scaledHeight;
         int yogiY;
+        int scaledWidth, scaledHeight;
+        double scale;
 
         if (!yogi.isCrouching()) {
             scale = (double) yogi.getHeight() / YogiBear.SPRITE_HEIGHT;
@@ -110,10 +123,11 @@ public class GameRenderer {
         } else {
             scale = (double) yogi.getHeight() * 2 / YogiBear.SPRITE_HEIGHT;
             scaledHeight = yogi.getHeight() * 2;
-            yogiY = yogi.getY() - GameConfig.TILE_SIZE * (YogiBear.TILE_HEIGHT - 2);
+            int scaledOffset = YogiBear.TILE_HEIGHT - 1;
+            yogiY = yogi.getY() - GameConfig.TILE_SIZE * scaledOffset;
         }
 
-        int scaledWidth = (int) (YogiBear.SPRITE_WIDTH * scale);
+        scaledWidth = (int) (YogiBear.SPRITE_WIDTH * scale);
         int action = yogi.getAction();
         BufferedImage sprite = yogiAnimations[action][yogi.getAnimationIndex()];
 
@@ -157,10 +171,21 @@ public class GameRenderer {
     }
 
     private void renderUI(Graphics g, GameModel gameModel) {
+        if (heartSprite != null) {
+            int heartSize = 30;
+            int heartSpacing = 40;
+            int startX = 10;
+            int startY = 10;
+
+            for (int i = 0; i < gameModel.getLives(); i++) {
+                g.drawImage(heartSprite, startX + (i * heartSpacing), startY, heartSize, heartSize, null);
+            }
+        }
+
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Score: " + gameModel.getScore(), 10, 25);
-        g.drawString("Lives: " + gameModel.getLives(), 10, 50);
+        g.drawString("Score: " + gameModel.getScore(), 10, 60);
+        g.drawString("Time: " + gameModel.getFormattedTime(), 10, 85);
     }
 
     public void renderMessage(Graphics g, String message, int alpha, int width, int height) {

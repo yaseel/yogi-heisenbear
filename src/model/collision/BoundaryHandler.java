@@ -2,38 +2,30 @@ package model.collision;
 
 import model.GameConfig;
 import model.level.Level;
-import model.entity.yogi.YogiBear;
+import view.game.GameStateManager;
+
+import java.awt.Rectangle;
 
 public class BoundaryHandler {
-    private YogiBear yogi;
 
-    public BoundaryHandler(YogiBear yogi) {
-        this.yogi = yogi;
+    public static void checkBoundaries(Rectangle yogiBox, Level level, GameStateManager stateManager) {
+        checkBottomBoundary(yogiBox, stateManager);
+        checkRightBoundary(yogiBox, level, stateManager);
     }
 
-    public BoundaryResult checkBoundaries(Level level) {
-        int yogiRight = yogi.getX() + yogi.getWidth();
-        int yogiBottom = yogi.getY() + yogi.getHeight();
-
-        if (yogiBottom > GameConfig.LEVEL_HEIGHT) {
-            return BoundaryResult.FELL;
+    private static void checkBottomBoundary(Rectangle yogiBox, GameStateManager stateManager) {
+        if (yogiBox.y + yogiBox.height > GameConfig.LEVEL_HEIGHT) {
+            stateManager.onFell();
         }
+    }
 
-        if (yogiRight >= GameConfig.LEVEL_WIDTH) {
+    private static void checkRightBoundary(Rectangle yogiBox, Level level, GameStateManager stateManager) {
+        if (yogiBox.x + yogiBox.width >= GameConfig.LEVEL_WIDTH - GameConfig.TILE_SIZE) {
             if (level.getRemainingCollectibles() == 0) {
-                return BoundaryResult.NEXT_LEVEL;
+                stateManager.onLevelComplete();
             } else {
-                return BoundaryResult.BLOCKED;
+                stateManager.onBlocked();
             }
         }
-
-        return BoundaryResult.NONE;
-    }
-
-    public enum BoundaryResult {
-        NONE,
-        FELL,
-        NEXT_LEVEL,
-        BLOCKED
     }
 }

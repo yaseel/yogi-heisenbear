@@ -14,12 +14,14 @@ public class GamePanel extends JPanel {
     private MenuController menuController;
 
     public GamePanel() {
-        setPreferredSize(new Dimension(GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT));
+        setPreferredSize(new Dimension(
+                (int) (GameConfig.LEVEL_WIDTH * GameConfig.WINDOW_SCALE),
+                (int) (GameConfig.LEVEL_HEIGHT * GameConfig.WINDOW_SCALE)));
         setBackground(new Color(135, 206, 235));
         setFocusable(true);
 
-        gameController = new GameController();
         renderer = new GameRenderer();
+        gameController = new GameController();
 
         addKeyListener(gameController.getInputHandler());
 
@@ -28,6 +30,10 @@ public class GamePanel extends JPanel {
 
     public void setMenuController(MenuController menuController) {
         this.menuController = menuController;
+    }
+
+    public GameController getGameController() {
+        return gameController;
     }
 
     private void startGameLoop() {
@@ -42,7 +48,6 @@ public class GamePanel extends JPanel {
     private void update() {
         gameController.update();
 
-        // Handle game state transitions
         if (gameController.isGameOver()) {
             gameController.clearGameOverFlag();
             gameController.resetGame();
@@ -66,7 +71,6 @@ public class GamePanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        // Calculate scale factors
         double scaleX = (double) getWidth() / GameConfig.LEVEL_WIDTH;
         double scaleY = (double) getHeight() / GameConfig.LEVEL_HEIGHT;
 

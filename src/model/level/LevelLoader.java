@@ -1,133 +1,45 @@
 package model.level;
 
-import model.collectible.Collectible;
-import model.GameConfig;
-import model.collectible.Gun;
-import model.collectible.MethBasket;
-import model.collectible.Money;
-import model.entity.agent.Agent;
-import model.entity.agent.AgentSpawn;
+import model.level.tile.Tile;
+import view.renderer.SpriteAtlas;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LevelLoader {
+    private static SpriteAtlas spriteAtlas;
 
-    private static class LevelData {
+    public static void setSpriteAtlas(SpriteAtlas atlas) {
+        spriteAtlas = atlas;
+    }
+
+    public static Level loadLevel(int levelNumber) {
+        BufferedImage[][] levelSprites = spriteAtlas.getLevelSprites();
+        int levelIndex = levelNumber - 1;
+
+        BufferedImage terrainImage = levelSprites[levelIndex][0];
+        BufferedImage overlayImage = levelSprites[levelIndex][1];
+
+        Tile[][] tileGrid = TerrainParser.parseTerrainImage(terrainImage);
+        OverlayParser.OverlayData overlayData = OverlayParser.parseOverlayImage(overlayImage);
+
+        List<Tile> tiles = flattenTileGrid(tileGrid);
+
+        return new Level(
+                tiles,
+                overlayData.collectibles,
+                overlayData.agents,
+                overlayData.yogiStartX,
+                overlayData.yogiStartY);
+    }
+
+    private static List<Tile> flattenTileGrid(Tile[][] grid) {
         List<Tile> tiles = new ArrayList<>();
-        List<Collectible> collectibles = new ArrayList<>();
-        List<Agent> agents = new ArrayList<>();
-        List<AgentSpawn> agentSpawns = new ArrayList<>();
-        int yogiStartX = 0;
-        int yogiStartY = 0;
-    }
-
-    public static Level loadLevel(String filename) {
-        LevelData data = new LevelData();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            parseLevelFile(br, data);
-        } catch (IOException e) {
-            System.err.println("Error loading level: " + e.getMessage());
+        for (Tile[] row : grid) {
+            Collections.addAll(tiles, row);
         }
-
-        return new Level(data.tiles, data.collectibles, data.agents, data.yogiStartX, data.yogiStartY);
+        return tiles;
     }
-
-    private static void parseLevelFile(BufferedReader br, LevelData data) throws IOException {
-        String line;
-        int row = 0;
-        boolean inRoutesSection = false;
-
-        while ((line = br.readLine()) != null) {
-            if (line.trim().equals("ROUTES")) {
-                inRoutesSection = true;
-            } else {
-                if (inRoutesSection) {
-                    parseAgentRoute(line, data);
-                } else {
-                    processTileRow(line, row, data);
-                    row++;
-                }
-            }
-        }
-    }
-
-    private static void processTileRow(String line, int row, LevelData data) {
-        for (int col = 0; col < line.length(); col++) {
-            char c = line.charAt(col);
-            int x = col * GameConfig.TILE_SIZE;
-            int y = row * GameConfig.TILE_SIZE;
-
-            Tile.Type type = charToTileType(c);
-            type = handleSpecialTile(type, c, x, y, data);
-
-            data.tiles.add(new Tile(type, x, y));
-        }
-    }
-
-    private static Tile.Type handleSpecialTile(Tile.Type type, char c, int x, int y, LevelData data) {
-        switch (type) {
-            case SPAWN_POINT:
-                data.yogiStartX = x;
-                data.yogiStartY = y;
-                return Tile.Type.AIR;
-            case COLLECTIBLE:
-                int collectibleY = y - GameConfig.TILE_SIZE * (Collectible.TILE_SIZE_COUNT - 1);
-                if (c == '*')
-                    data.collectibles.add(new MethBasket(x, collectibleY));
-                else if (c == '~')
-                    data.collectibles.add(new Gun(x, collectibleY));
-                else if (c == '$')
-                    data.collectibles.add(new Money(x, collectibleY));
-                return Tile.Type.AIR;
-            case AGENT_SPAWN:
-                data.agentSpawns.add(new AgentSpawn(x, y));
-                return Tile.Type.AIR;
-            default:
-                return type;
-        }
-    }
-
-    private static void parseAgentRoute(String line, LevelData data) {
-        if (line.trim().isEmpty()) {
-            return;
-        }
-
-        String[] parts = line.split(":");
-        if (parts.length != 2) {
-            return;
-        }
-
-        try {
-            int agentIndex = Integer.parseInt(parts[0].trim());
-            String[] cols = parts[1].split(",");
-            int startCol = Integer.parseInt(cols[0].trim());
-            int endCol = Integer.parseInt(cols[1].trim());
-
-            if (agentIndex < data.agentSpawns.size()) {
-                AgentSpawn spawn = data.agentSpawns.get(agentIndex);
-                int agentY = spawn.y - GameConfig.TILE_SIZE * (Agent.TILE_HEIGHT - 2);
-                data.agents.add(new Agent(spawn.x, agentY, startCol, endCol));
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid route format: " + line);
-        }
-    }
-
-    private static Tile.Type charToTileType(char c) {
-        return switch (c) {
-            case '#' -> Tile.Type.WALL;
-            case '=' -> Tile.Type.PLATFORM;
-            case '_' -> Tile.Type.GROUND;
-            case 'Y' -> Tile.Type.SPAWN_POINT;
-            case '*', '~', '$' -> Tile.Type.COLLECTIBLE;
-            case 'A' -> Tile.Type.AGENT_SPAWN;
-            default -> Tile.Type.AIR;
-        };
-    }
-
 }

@@ -1,7 +1,6 @@
 package controller;
 
 import model.entity.yogi.YogiBear;
-import model.collision.CollisionSystem;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -10,12 +9,10 @@ import java.util.Set;
 
 public class InputHandler extends KeyAdapter {
     private YogiBear yogi;
-    private CollisionSystem collisionSystem;
     private Set<Integer> pressedKeys;
 
-    public InputHandler(YogiBear yogi, CollisionSystem collisionSystem) {
+    public InputHandler(YogiBear yogi) {
         this.yogi = yogi;
-        this.collisionSystem = collisionSystem;
         this.pressedKeys = new HashSet<>();
     }
 
@@ -49,16 +46,15 @@ public class InputHandler extends KeyAdapter {
             yogi.crouch();
             yogi.requestDropThrough();
         } else {
-            yogi.standUp(collisionSystem.canStandUp());
+            yogi.standUp(yogi.canStandUp());
+            if (yogi.canClearDropThrough()) {
+                yogi.clearDropThrough();
+            }
         }
 
         if (!moving) {
             yogi.stopMoving();
         }
-    }
-
-    public void setCollisionSystem(CollisionSystem collisionSystem) {
-        this.collisionSystem = collisionSystem;
     }
 
     public void clearAllKeys() {

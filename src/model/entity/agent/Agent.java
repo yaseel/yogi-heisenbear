@@ -17,13 +17,13 @@ public class Agent extends Entity {
     public static final int SPRITE_WIDTH = 488;
     public static final int SPRITE_HEIGHT = 491;
 
-    public static final int TILE_WIDTH = 2;
-    public static final int TILE_HEIGHT = 4;
+    public static final int TILE_WIDTH = 1;
+    public static final int TILE_HEIGHT = 2;
 
     public static final int WIDTH = GameConfig.TILE_SIZE * TILE_WIDTH;
     public static final int HEIGHT = GameConfig.TILE_SIZE * TILE_HEIGHT;
 
-    public static final String spritePath = GameConfig.BASE_SPRITE_PATH + "agent.png";
+    public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "agent.png";
 
     private int startX, startY;
     private int patrolStartCol;
@@ -107,30 +107,32 @@ public class Agent extends Entity {
     }
 
     @Override
-    public Rectangle getBounds() {
+    public Rectangle getHitbox() {
         return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public boolean canSeeYogi(YogiBear yogi) {
         int visionRange = GameConfig.AGENT_VISION_RANGE * GameConfig.TILE_SIZE;
 
-        int yogiBottom = yogi.getY() + yogi.getHeight();
-        int agentBottom = y + HEIGHT;
+        Rectangle yogiBox = yogi.getHitbox();
+        Rectangle agentBox = getHitbox();
+        int yogiBottom = yogiBox.y + yogiBox.height;
+        int agentBottom = agentBox.y + agentBox.height;
 
-        boolean yOverlap = !(yogiBottom < y || yogi.getY() > agentBottom);
+        boolean yOverlap = !(yogiBottom < agentBox.y || yogiBox.y > agentBottom);
 
         if (!yOverlap) {
             return false;
         }
 
         if (facingRight) {
-            int visionStart = x + WIDTH;
+            int visionStart = agentBox.x + agentBox.width;
             int visionEnd = visionStart + visionRange;
-            return yogi.getX() >= visionStart && yogi.getX() < visionEnd;
+            return yogiBox.x >= visionStart && yogiBox.x < visionEnd;
         } else {
-            int visionEnd = x;
+            int visionEnd = agentBox.x;
             int visionStart = visionEnd - visionRange;
-            return yogi.getX() + yogi.getWidth() > visionStart && yogi.getX() + yogi.getWidth() <= visionEnd;
+            return yogiBox.x + yogiBox.width > visionStart && yogiBox.x + yogiBox.width <= visionEnd;
         }
     }
 
