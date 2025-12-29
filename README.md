@@ -1,1 +1,65 @@
-# Yogi Heisenbear
+# 🐻 Yogi Heisenbear
+
+## For Players: How to Run the Game
+
+### Quick Start (Any Platform)
+1. Make sure you have Java installed (Java 8 or higher)
+   - Check with: `java -version`
+   - If not installed, download from: https://adoptium.net
+
+2. Run the game:
+   ```bash
+   java -jar YogiHeisenbear.jar
+   ```
+
+### Easy Launch Scripts
+
+**macOS/Linux:**
+```bash
+./run.sh
+```
+
+**Windows:**
+Double-click `RUN.bat`
+
+---
+
+## For Developers: Building the Game
+
+### Build the executable JAR:
+
+**macOS/Linux:**
+```bash
+chmod +x build-jar.sh
+./build-jar.sh
+```
+
+**Windows:**
+```cmd
+build-jar.bat
+```
+
+This creates `YogiHeisenbear.jar` which can be distributed and run on any platform with Java.
+
+---
+
+## Distribution
+
+To distribute your game:
+1. Build the JAR using the build script above
+2. Give users:
+   - `YogiHeisenbear.jar`
+   - `RUN.bat` (for Windows) or `run.sh` (for Mac/Linux)
+   - Instructions to install Java if they don't have it
+
+See `HOW_TO_BUILD.md` for advanced packaging options (creating macOS .app bundles, Windows .exe files, etc.)
+
+---
+
+## Controls
+- Arrow Keys: Move
+- Space: Jump
+- S: Crouch
+- ESC: Menu
+
+Enjoy the game! 🎮

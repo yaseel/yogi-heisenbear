@@ -1,2 +1,9 @@
 /.idea/
 /out/
+
+# Build artifacts
+/build/
+*.jar
+*.class
+sources.txt
+YogiHeisenbear.app/

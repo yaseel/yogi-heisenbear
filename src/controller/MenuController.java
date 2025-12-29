@@ -19,36 +19,31 @@ public class MenuController {
         this.menuPanel = menuPanel;
         this.leaderboardController = new LeaderboardController(leaderboardPanel);
 
-        setupButtonListeners();
-    }
-
-    private void setupButtonListeners() {
-        menuPanel.getStartButton().addActionListener(_ -> {
-            gamePanel.getGameController().startGame();
-            onStartGame();
-        });
-
-        menuPanel.getLeaderboardButton().addActionListener(_ -> onShowLeaderboard());
-        menuPanel.getExitButton().addActionListener(_ -> onExitGame());
-
+        menuPanel.setMenuController(this);
         leaderboardController.getLeaderboardPanel().getBackButton().addActionListener(_ -> returnToMenu());
     }
 
-    private void onStartGame() {
+    public void onStartGame() {
+        gamePanel.getGameController().startGame();
         gameFrame.showPanel(PanelType.GAME);
         gamePanel.requestFocusInWindow();
     }
 
-    private void onShowLeaderboard() {
+    public void onShowLeaderboard() {
         leaderboardController.refreshLeaderboard();
         gameFrame.showPanel(PanelType.LEADERBOARD);
     }
 
-    private void onExitGame() {
+    public void onShowSettings() {
+        System.out.println("Settings");
+    }
+
+    public void onExit() {
         System.exit(0);
     }
 
     public void returnToMenu() {
         gameFrame.showPanel(PanelType.MENU);
+        menuPanel.requestFocusInWindow();
     }
 }
