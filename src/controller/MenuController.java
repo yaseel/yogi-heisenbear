@@ -24,8 +24,6 @@ public class MenuController {
 
     private void setupButtonListeners() {
         menuPanel.getStartButton().addActionListener(_ -> {
-            String playerName = menuPanel.getPlayerName();
-            gamePanel.getGameController().setPlayerName(playerName);
             gamePanel.getGameController().startGame();
             onStartGame();
         });
