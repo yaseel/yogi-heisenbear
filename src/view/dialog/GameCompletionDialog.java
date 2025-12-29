@@ -47,7 +47,7 @@ public class GameCompletionDialog {
         int result = JOptionPane.showOptionDialog(
                 parent,
                 panel,
-                "Game Complete!",
+                "Finish!",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
