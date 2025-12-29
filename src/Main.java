@@ -19,18 +19,8 @@ public class Main {
             frame.addPanel(PanelType.GAME, gamePanel);
             frame.addPanel(PanelType.LEADERBOARD, leaderboardPanel);
 
-            MenuController menuController = new MenuController(frame, gamePanel, leaderboardPanel);
+            MenuController menuController = new MenuController(frame, gamePanel, menuPanel, leaderboardPanel);
             gamePanel.setMenuController(menuController);
-
-            menuPanel.getStartButton().addActionListener(_ -> {
-                String playerName = menuPanel.getPlayerName();
-                gamePanel.getGameController().setPlayerName(playerName);
-                menuController.onStartGame();
-            });
-            menuPanel.getLeaderboardButton().addActionListener(_ -> menuController.onShowLeaderboard());
-            menuPanel.getExitButton().addActionListener(_ -> menuController.onExitGame());
-
-            leaderboardPanel.getBackButton().addActionListener(_ -> menuController.returnToMenu());
 
             frame.showPanel(PanelType.MENU);
             frame.pack();

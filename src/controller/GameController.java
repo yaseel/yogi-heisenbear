@@ -31,7 +31,6 @@ public class GameController {
         yogi = new YogiBear(level.getYogiStartX(), level.getYogiStartY());
         yogi.setLevelData(level.getLevelData());
         gameModel = new GameModel();
-        gameModel.startTimer();
         stateManager = new GameStateManager(level, yogi, gameModel);
         inputHandler = new InputHandler(yogi);
         leaderboardController = new LeaderboardController(null);
@@ -124,6 +123,10 @@ public class GameController {
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName != null && !playerName.trim().isEmpty() ? playerName : "Player";
+    }
+
+    public void startGame() {
+        gameModel.startTimer();
     }
 
     public YogiBear getYogi() {
