@@ -28,6 +28,7 @@ public class LevelConfig {
             new LevelRange(1, 2, "forest.png", TileType.GRASS, TileType.WOOD),
             new LevelRange(3, 5, "desert.png", TileType.SANDSTONE, TileType.PIPE),
             new LevelRange(6, 7, "industrial.png", TileType.SANDSTONE, TileType.PIPE),
+            new LevelRange(8, 10, "lab.png", TileType.RED_TILE, TileType.CATWALK),
     };
 
     public static String getBackgroundForLevel(int levelNumber) {

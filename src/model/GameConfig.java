@@ -19,7 +19,7 @@ public class GameConfig {
     public static final int AGENT_VISION_RANGE = 1;
 
     public static final int MESSAGE_DURATION = 60;
-    public static final int LAST_LEVEL_NUM = 7;
+    public static final int LAST_LEVEL_NUM = 10;
 
     public static final String BASE_SPRITE_PATH = "src/resources/sprites/";
     public static final String BASE_BACKGROUND_PATH = "src/resources/backgrounds/";

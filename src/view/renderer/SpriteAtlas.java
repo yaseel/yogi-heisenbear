@@ -30,8 +30,8 @@ public class SpriteAtlas {
     private BufferedImage levelsSprite;
     private BufferedImage[][] levelSprites;
 
-    public static final int BACKGROUND_COUNT = 2;
-    public static final String[] BACKGROUND_FILES = { "forest.png", "desert.png" };
+    public static final int BACKGROUND_COUNT = 4;
+    public static final String[] BACKGROUND_FILES = { "forest.png", "desert.png", "industrial.png", "lab.png" };
 
     public SpriteAtlas() {
         loadSprites();
