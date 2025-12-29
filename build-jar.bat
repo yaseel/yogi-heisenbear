@@ -17,9 +17,15 @@ javac -d build @sources.txt
 del sources.txt
 
 REM Copy resources if they exist
-if exist resources (
+if exist src\resources (
     echo Copying resources...
-    xcopy /E /I resources build\resources
+    xcopy /E /I src\resources build\resources
+)
+
+REM Copy level files if they exist
+if exist src\levels (
+    echo Copying levels...
+    xcopy /E /I src\levels build\levels
 )
 
 REM Create JAR

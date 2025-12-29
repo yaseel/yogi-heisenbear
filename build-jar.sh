@@ -16,10 +16,16 @@ find src -name "*.java" > sources.txt
 javac -d build @sources.txt
 rm sources.txt
 
-# Copy resources if they exist
-if [ -d "resources" ]; then
+# Copy resources from src/resources
+if [ -d "src/resources" ]; then
     echo "Copying resources..."
-    cp -r resources build/
+    cp -r src/resources build/
+fi
+
+# Copy level files if they exist
+if [ -d "src/levels" ]; then
+    echo "Copying levels..."
+    cp -r src/levels build/
 fi
 
 # Create JAR
