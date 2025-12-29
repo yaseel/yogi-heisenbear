@@ -23,7 +23,7 @@ public class LeaderboardController {
         leaderboardPanel.updateLeaderboard(entries);
     }
 
-    public List<LeaderboardEntry> getTopEntries(int limit) {
-        return LeaderboardManager.getTopEntries(limit);
+    public LeaderboardPanel getLeaderboardPanel() {
+        return leaderboardPanel;
     }
 }

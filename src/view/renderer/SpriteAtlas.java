@@ -25,10 +25,13 @@ public class SpriteAtlas {
     private BufferedImage tileSprite;
     private BufferedImage[][] tileSprites;
 
-    private BufferedImage background;
+    private BufferedImage[] backgrounds;
     private BufferedImage heartSprite;
     private BufferedImage levelsSprite;
     private BufferedImage[][] levelSprites;
+
+    public static final int BACKGROUND_COUNT = 4;
+    public static final String[] BACKGROUND_FILES = { "forest.png", "desert.png", "industrial.png", "lab.png" };
 
     public SpriteAtlas() {
         loadSprites();
@@ -40,9 +43,9 @@ public class SpriteAtlas {
         agentSprite = loadSprite(Agent.SPRITE_PATH);
         collectibleSprite = loadSprite(Collectible.SPRITE_PATH);
         tileSprite = loadSprite(Tile.SPRITE_PATH);
-        background = loadSprite(GameConfig.BASE_SPRITE_PATH + "background.png");
         heartSprite = loadSprite(GameConfig.BASE_SPRITE_PATH + "heart.png");
         levelsSprite = loadSprite(GameConfig.BASE_SPRITE_PATH + "levels.png");
+        loadBackgrounds();
     }
 
     private BufferedImage loadSprite(String path) {
@@ -108,8 +111,20 @@ public class SpriteAtlas {
         return tileSprites;
     }
 
-    public BufferedImage getBackground() {
-        return background;
+    private void loadBackgrounds() {
+        backgrounds = new BufferedImage[BACKGROUND_COUNT];
+        for (int i = 0; i < BACKGROUND_COUNT; i++) {
+            backgrounds[i] = loadSprite(GameConfig.BASE_BACKGROUND_PATH + BACKGROUND_FILES[i]);
+        }
+    }
+
+    public BufferedImage getBackground(String filename) {
+        for (int i = 0; i < BACKGROUND_FILES.length; i++) {
+            if (BACKGROUND_FILES[i].equals(filename)) {
+                return backgrounds[i];
+            }
+        }
+        return backgrounds[0];
     }
 
     public BufferedImage getHeartSprite() {

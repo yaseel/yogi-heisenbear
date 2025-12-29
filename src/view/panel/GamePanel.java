@@ -1,8 +1,10 @@
 package view.panel;
 
 import controller.GameController;
+import controller.LeaderboardController;
 import controller.MenuController;
 import model.*;
+import view.dialog.GameCompletionDialog;
 import view.renderer.GameRenderer;
 
 import javax.swing.*;
@@ -11,6 +13,7 @@ import java.awt.*;
 public class GamePanel extends JPanel {
     private final GameController gameController;
     private final GameRenderer renderer;
+    private final LeaderboardController leaderboardController;
     private MenuController menuController;
 
     public GamePanel() {
@@ -22,6 +25,7 @@ public class GamePanel extends JPanel {
 
         renderer = new GameRenderer();
         gameController = new GameController();
+        leaderboardController = new LeaderboardController(null);
 
         addKeyListener(gameController.getInputHandler());
 
@@ -58,6 +62,18 @@ public class GamePanel extends JPanel {
 
         if (gameController.isGameFinished()) {
             gameController.clearGameFinishedFlag();
+
+            // Show completion dialog
+            int score = gameController.getGameModel().getScore();
+            String formattedTime = gameController.getGameModel().getFormattedTime();
+
+            GameCompletionDialog.CompletionResult result = GameCompletionDialog.showDialog(this, score, formattedTime);
+
+            if (result.shouldSave) {
+                long timeMillis = gameController.getGameModel().getElapsedTime();
+                leaderboardController.saveEntry(result.playerName, score, timeMillis);
+            }
+
             gameController.resetGame();
             if (menuController != null) {
                 menuController.returnToMenu();

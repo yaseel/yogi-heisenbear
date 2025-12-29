@@ -6,6 +6,7 @@ import model.collectible.MethBasket;
 import model.entity.agent.Agent;
 import model.level.tile.Tile;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class Level {
@@ -14,13 +15,16 @@ public class Level {
     private List<Agent> agents;
     private int yogiStartX;
     private int yogiStartY;
+    private BufferedImage background;
 
-    public Level(List<Tile> tiles, List<Collectible> collectibles, List<Agent> agents, int yogiStartX, int yogiStartY) {
+    public Level(List<Tile> tiles, List<Collectible> collectibles, List<Agent> agents, int yogiStartX, int yogiStartY,
+            BufferedImage background) {
         this.tiles = tiles;
         this.collectibles = collectibles;
         this.agents = agents;
         this.yogiStartX = yogiStartX;
         this.yogiStartY = yogiStartY;
+        this.background = background;
     }
 
     public List<Tile> getTiles() {
@@ -41,6 +45,10 @@ public class Level {
 
     public int getYogiStartY() {
         return yogiStartY;
+    }
+
+    public BufferedImage getBackground() {
+        return background;
     }
 
     public int getRemainingCollectibles() {

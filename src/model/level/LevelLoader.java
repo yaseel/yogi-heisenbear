@@ -22,7 +22,13 @@ public class LevelLoader {
         BufferedImage terrainImage = levelSprites[levelIndex][0];
         BufferedImage overlayImage = levelSprites[levelIndex][1];
 
-        Tile[][] tileGrid = TerrainParser.parseTerrainImage(terrainImage);
+        String backgroundFile = LevelConfig.getBackgroundForLevel(levelNumber);
+        int groundTilesetIndex = LevelConfig.getGroundTilesetIndex(levelNumber);
+        int platformTilesetIndex = LevelConfig.getPlatformTilesetIndex(levelNumber);
+
+        BufferedImage background = spriteAtlas.getBackground(backgroundFile);
+
+        Tile[][] tileGrid = TerrainParser.parseTerrainImage(terrainImage, groundTilesetIndex, platformTilesetIndex);
         OverlayParser.OverlayData overlayData = OverlayParser.parseOverlayImage(overlayImage);
 
         List<Tile> tiles = flattenTileGrid(tileGrid);
@@ -32,7 +38,8 @@ public class LevelLoader {
                 overlayData.collectibles,
                 overlayData.agents,
                 overlayData.yogiStartX,
-                overlayData.yogiStartY);
+                overlayData.yogiStartY,
+                background);
     }
 
     private static List<Tile> flattenTileGrid(Tile[][] grid) {

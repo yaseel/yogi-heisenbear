@@ -23,18 +23,14 @@ public class GameController {
     private int currentLevelNumber = 1;
     private boolean gameOver = false;
     private boolean gameFinished = false;
-    private String playerName = "Player";
-    private LeaderboardController leaderboardController;
 
     public GameController() {
         loadLevel(currentLevelNumber);
         yogi = new YogiBear(level.getYogiStartX(), level.getYogiStartY());
         yogi.setLevelData(level.getLevelData());
         gameModel = new GameModel();
-        gameModel.startTimer();
         stateManager = new GameStateManager(level, yogi, gameModel);
         inputHandler = new InputHandler(yogi);
-        leaderboardController = new LeaderboardController(null);
     }
 
     private void loadLevel(int levelNumber) {
@@ -89,7 +85,6 @@ public class GameController {
                 stateManager.onGameFinished();
                 stateManager.resetLevelCompleteFlag();
                 gameModel.stopTimer();
-                leaderboardController.saveEntry(playerName, gameModel.getScore(), gameModel.getElapsedTime());
                 gameFinished = true;
             } else {
                 loadNextLevel();
@@ -116,13 +111,14 @@ public class GameController {
         currentLevelNumber = 1;
         loadLevel(currentLevelNumber);
         gameModel.reset();
+        gameModel.startTimer();
         resetLevelState();
         gameOver = false;
         gameFinished = false;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName != null && !playerName.trim().isEmpty() ? playerName : "Player";
+    public void startGame() {
+        gameModel.startTimer();
     }
 
     public YogiBear getYogi() {
