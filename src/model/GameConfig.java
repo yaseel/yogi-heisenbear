@@ -1,7 +1,8 @@
 package model;
 
 public class GameConfig {
-    public static final int FPS = 60;
+    public static final int FPS = 120;
+    public static final int UPS = 60;
     public static final int ANIMATION_SPEED = 15;
 
     public static final int TILE_SIZE = 32;

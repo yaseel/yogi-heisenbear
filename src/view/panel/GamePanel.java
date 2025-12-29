@@ -9,12 +9,15 @@ import view.renderer.GameRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Runnable {
     private final GameController gameController;
     private final GameRenderer renderer;
     private final LeaderboardController leaderboardController;
     private MenuController menuController;
+    private Thread gameThread;
 
     public GamePanel() {
         setPreferredSize(new Dimension(
@@ -28,6 +31,16 @@ public class GamePanel extends JPanel {
         leaderboardController = new LeaderboardController(null);
 
         addKeyListener(gameController.getInputHandler());
+        addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                windowFocusLost();
+            }
+        });
 
         startGameLoop();
     }
@@ -41,12 +54,41 @@ public class GamePanel extends JPanel {
     }
 
     private void startGameLoop() {
-        int delay = 1000 / GameConfig.FPS;
-        Timer gameLoop = new Timer(delay, _ -> {
-            update();
-            repaint();
-        });
-        gameLoop.start();
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    private void windowFocusLost() {
+        gameController.getInputHandler().clearAllKeys();
+    }
+
+    @Override
+    public void run() {
+        double timePerFrame = 1_000_000_000.0 / GameConfig.FPS;
+        double timePerUpdate = 1_000_000_000.0 / GameConfig.UPS;
+
+        long previousTime = System.nanoTime();
+
+        double deltaU = 0;
+        double deltaF = 0;
+
+        while (true) {
+            long currentTime = System.nanoTime();
+
+            deltaU += (currentTime - previousTime) / timePerUpdate;
+            deltaF += (currentTime - previousTime) / timePerFrame;
+            previousTime = currentTime;
+
+            if (deltaU >= 1) {
+                update();
+                deltaU--;
+            }
+
+            if (deltaF >= 1) {
+                repaint();
+                deltaF--;
+            }
+        }
     }
 
     private void update() {
