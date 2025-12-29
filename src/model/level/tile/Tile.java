@@ -5,7 +5,7 @@ import model.GameConfig;
 public class Tile {
     public static final String SPRITE_PATH = GameConfig.BASE_SPRITE_PATH + "tiles.png";
     public static final int SPRITE_SIZE = 32;
-    public static final int TILE_COUNT = 2;
+    public static final int TILE_COUNT = 4;
     public static final int MAX_TILE_VARIANTS = 11;
 
     public static final int VARIANT_SINGLE = 0;
@@ -22,7 +22,6 @@ public class Tile {
 
     public enum Type {
         AIR,
-        WALL,
         PLATFORM,
         GROUND,
         SPAWN_POINT,
@@ -56,10 +55,6 @@ public class Tile {
 
     public int getVariant() {
         return variant;
-    }
-
-    public boolean isSolid() {
-        return type == Type.WALL || type == Type.PLATFORM || type == Type.GROUND;
     }
 
     public Type getType() {

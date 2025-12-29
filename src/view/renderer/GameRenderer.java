@@ -22,7 +22,6 @@ public class GameRenderer {
     private final BufferedImage[][] agentAnimations;
     private final BufferedImage[][] collectibleSubImages;
     private final BufferedImage[][] tileSprites;
-    private final BufferedImage background;
     private final BufferedImage heartSprite;
 
     public GameRenderer() {
@@ -32,18 +31,17 @@ public class GameRenderer {
         agentAnimations = spriteAtlas.getAgentAnimations();
         collectibleSubImages = spriteAtlas.getCollectibleSubImages();
         tileSprites = spriteAtlas.getTileSprites();
-        background = spriteAtlas.getBackground();
         heartSprite = spriteAtlas.getHeartSprite();
     }
 
     public void render(Graphics g, YogiBear yogi, Level level, GameModel gameModel) {
-        renderBackground(g);
+        renderBackground(g, level);
         renderTiles(g, level);
         renderCollectibles(g, level);
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
-        renderHitbox(g, yogi.getHitbox());
+        //renderHitbox(g, yogi.getHitbox());
     }
 
     private void renderHitbox(Graphics g, Rectangle hitbox) {
@@ -51,8 +49,11 @@ public class GameRenderer {
         g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
 
-    private void renderBackground(Graphics g) {
-        g.drawImage(background, 0, 0, GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT, null);
+    private void renderBackground(Graphics g, Level level) {
+        BufferedImage background = level.getBackground();
+        if (background != null) {
+            g.drawImage(background, 0, 0, GameConfig.LEVEL_WIDTH, GameConfig.LEVEL_HEIGHT, null);
+        }
     }
 
     private void renderTiles(Graphics g, Level level) {

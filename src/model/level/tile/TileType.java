@@ -3,12 +3,10 @@ package model.level.tile;
 import java.awt.Color;
 
 public class TileType {
-    public static final int WALL = 2;
     public static final int PLATFORM = 1;
     public static final int GROUND = 0;
 
     public static class Colors {
-        public static final Color WALL_COLOR = new Color(0x8B4513);
         public static final Color PLATFORM_COLOR = new Color(0x808080);
         public static final Color GROUND_COLOR = new Color(0x5A3C1E);
 

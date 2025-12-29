@@ -116,6 +116,7 @@ public class GameController {
         currentLevelNumber = 1;
         loadLevel(currentLevelNumber);
         gameModel.reset();
+        gameModel.startTimer();
         resetLevelState();
         gameOver = false;
         gameFinished = false;

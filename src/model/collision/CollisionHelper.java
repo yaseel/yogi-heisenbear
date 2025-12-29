@@ -55,7 +55,7 @@ public class CollisionHelper {
 
         Tile.Type type = Tile.Type.values()[tileValue];
 
-        if (type == Tile.Type.WALL || type == Tile.Type.GROUND) {
+        if (type == Tile.Type.GROUND) {
             return true;
         }
 
@@ -70,18 +70,6 @@ public class CollisionHelper {
         }
 
         return false;
-    }
-
-    public static int getEntityXPosNextToWall(int currentX, int width, int xSpeed) {
-        if (xSpeed > 0) {
-            int rightEdgeAfterMove = currentX + width - 1 + xSpeed;
-            int blockingTileLeft = (rightEdgeAfterMove / GameConfig.TILE_SIZE) * GameConfig.TILE_SIZE;
-            return blockingTileLeft - width;
-        } else {
-            int leftEdgeAfterMove = currentX + xSpeed;
-            int blockingTileRight = ((leftEdgeAfterMove / GameConfig.TILE_SIZE) + 1) * GameConfig.TILE_SIZE;
-            return blockingTileRight;
-        }
     }
 
     public static int getEntityYPosUnderRoofOrAboveFloor(int currentY, int height, int airSpeed) {
