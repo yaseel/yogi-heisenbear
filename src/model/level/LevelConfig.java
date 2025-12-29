@@ -25,8 +25,9 @@ public class LevelConfig {
     }
 
     private static final LevelRange[] LEVEL_CONFIGS = {
-            new LevelRange(1, 2, "forest.png", TileType.GROUND, TileType.PLATFORM),
-            new LevelRange(3, 5, "desert.png", TileType.GROUND + 2, TileType.PLATFORM + 2),
+            new LevelRange(1, 2, "forest.png", TileType.GRASS, TileType.WOOD),
+            new LevelRange(3, 5, "desert.png", TileType.SANDSTONE, TileType.PIPE),
+            new LevelRange(6, 7, "industrial.png", TileType.SANDSTONE, TileType.PIPE),
     };
 
     public static String getBackgroundForLevel(int levelNumber) {

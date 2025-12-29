@@ -3,8 +3,10 @@ package model.level.tile;
 import java.awt.Color;
 
 public class TileType {
-    public static final int PLATFORM = 1;
-    public static final int GROUND = 0;
+    public static final int GRASS = 0;
+    public static final int WOOD = 1;
+    public static final int SANDSTONE = 2;
+    public static final int PIPE = 3;
 
     public static class Colors {
         public static final Color PLATFORM_COLOR = new Color(0x808080);

@@ -40,7 +40,7 @@ public class CollisionHelper {
         if (x < 0)
             return true;
         if (y < 0)
-            return true;
+            return false;
         if (x >= maxWidth)
             return true;
         if (y >= GameConfig.LEVEL_HEIGHT)
