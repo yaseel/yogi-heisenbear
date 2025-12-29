@@ -1,6 +1,7 @@
 package view.panel;
 
 import model.leaderboard.LeaderboardEntry;
+import view.GameFont;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ public class LeaderboardPanel extends JPanel {
         setBackground(new Color(135, 206, 235));
 
         JLabel title = new JLabel("Leaderboard", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 48));
+        title.setFont(GameFont.getFont(48f));
         title.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(title, BorderLayout.NORTH);
 
@@ -22,16 +23,16 @@ public class LeaderboardPanel extends JPanel {
         Object[][] data = new Object[10][4];
 
         leaderboardTable = new JTable(data, columnNames);
-        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 16));
+        leaderboardTable.setFont(GameFont.getFont(16f));
         leaderboardTable.setRowHeight(30);
         leaderboardTable.setEnabled(false);
-        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
+        leaderboardTable.getTableHeader().setFont(GameFont.getFont(18f));
 
         JScrollPane scrollPane = new JScrollPane(leaderboardTable);
         add(scrollPane, BorderLayout.CENTER);
 
         backButton = new JButton("Back to Menu");
-        backButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        backButton.setFont(GameFont.getFont(20f));
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(135, 206, 235));
         buttonPanel.add(backButton);

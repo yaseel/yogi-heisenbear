@@ -1,5 +1,6 @@
 package view.panel;
 
+import view.GameFont;
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,22 +18,22 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(10, 0, 10, 0);
 
         JLabel title = new JLabel("Yogi Heisenbear");
-        title.setFont(new Font("Arial", Font.BOLD, 48));
+        title.setFont(GameFont.getFont(48f));
         c.gridy = 0;
         add(title, c);
 
         startButton = new JButton("Start Game");
-        startButton.setFont(new Font("Arial", Font.BOLD, 20));
+        startButton.setFont(GameFont.getFont(20f));
         c.gridy = 1;
         add(startButton, c);
 
         leaderboardButton = new JButton("Leaderboard");
-        leaderboardButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        leaderboardButton.setFont(GameFont.getFont(18f));
         c.gridy = 2;
         add(leaderboardButton, c);
 
         exitButton = new JButton("Exit");
-        exitButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        exitButton.setFont(GameFont.getFont(16f));
         c.gridy = 3;
         add(exitButton, c);
     }
