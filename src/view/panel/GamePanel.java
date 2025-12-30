@@ -3,6 +3,7 @@ package view.panel;
 import controller.GameController;
 import controller.LeaderboardController;
 import controller.MenuController;
+import controller.MusicManager;
 import model.*;
 import view.dialog.GameCompletionDialog;
 import view.renderer.GameRenderer;
@@ -105,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameController.isGameFinished()) {
             gameController.clearGameFinishedFlag();
 
-            // Show completion dialog
+            MusicManager.getInstance().playEndMusic();
             int score = gameController.getGameModel().getScore();
             String formattedTime = gameController.getGameModel().getFormattedTime();
 

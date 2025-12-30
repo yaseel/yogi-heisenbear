@@ -1,18 +1,24 @@
 package view.panel;
 
+import model.GameConfig;
 import model.leaderboard.LeaderboardEntry;
 import view.GameFont;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class LeaderboardPanel extends JPanel {
     private JButton backButton;
     private JTable leaderboardTable;
+    private BufferedImage backgroundImage;
 
     public LeaderboardPanel() {
+        backgroundImage = loadBackground(GameConfig.BASE_BACKGROUND_PATH + "main_menu.png");
         setLayout(new BorderLayout());
-        setBackground(new Color(135, 206, 235));
 
         JLabel title = new JLabel("Leaderboard", SwingConstants.CENTER);
         title.setFont(GameFont.getFont(48f));
@@ -29,12 +35,22 @@ public class LeaderboardPanel extends JPanel {
         leaderboardTable.getTableHeader().setFont(GameFont.getFont(18f));
 
         JScrollPane scrollPane = new JScrollPane(leaderboardTable);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        
+        Color tableBg = new Color(255, 255, 255, 230) ;
+                
+        leaderboardTable.setBackground(tableBg);
+        leaderboardTable.getTableHeader().setBackground(tableBg);
+        leaderboardTable.setOpaque(false);
+        
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         add(scrollPane, BorderLayout.CENTER);
 
         backButton = new JButton("Back to Menu");
         backButton.setFont(GameFont.getFont(20f));
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(135, 206, 235));
+        buttonPanel.setOpaque(false);
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -70,5 +86,25 @@ public class LeaderboardPanel extends JPanel {
 
     public JButton getBackButton() {
         return backButton;
+    }
+
+    private BufferedImage loadBackground(String path) {
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+            if (is != null) {
+                return ImageIO.read(is);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load image: " + path);
+        }
+        return null;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+        }
     }
 }

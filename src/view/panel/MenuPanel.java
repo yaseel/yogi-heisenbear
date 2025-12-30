@@ -36,8 +36,7 @@ public class MenuPanel extends JPanel {
         buttons = new ArrayList<>();
         buttons.add(new MenuButton("START GAME", 0));
         buttons.add(new MenuButton("LEADERBOARD", 1));
-        buttons.add(new MenuButton("SETTINGS", 2));
-        buttons.add(new MenuButton("EXIT", 3));
+        buttons.add(new MenuButton("EXIT", 2));
 
         renderer = new MenuRenderer();
         layoutManager = new MenuLayoutManager();
@@ -72,9 +71,6 @@ public class MenuPanel extends JPanel {
                 menuController.onShowLeaderboard();
                 break;
             case 2:
-                menuController.onShowSettings();
-                break;
-            case 3:
                 menuController.onExit();
                 break;
         }

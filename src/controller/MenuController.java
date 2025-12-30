@@ -21,9 +21,12 @@ public class MenuController {
 
         menuPanel.setMenuController(this);
         leaderboardController.getLeaderboardPanel().getBackButton().addActionListener(_ -> returnToMenu());
+
+        MusicManager.getInstance().playMenuMusic();
     }
 
     public void onStartGame() {
+        MusicManager.getInstance().playGameMusic();
         gamePanel.getGameController().startGame();
         gameFrame.showPanel(PanelType.GAME);
         gamePanel.requestFocusInWindow();
@@ -34,15 +37,12 @@ public class MenuController {
         gameFrame.showPanel(PanelType.LEADERBOARD);
     }
 
-    public void onShowSettings() {
-        System.out.println("Settings");
-    }
-
     public void onExit() {
         System.exit(0);
     }
 
     public void returnToMenu() {
+        MusicManager.getInstance().playMenuMusic();
         gameFrame.showPanel(PanelType.MENU);
         menuPanel.requestFocusInWindow();
     }
