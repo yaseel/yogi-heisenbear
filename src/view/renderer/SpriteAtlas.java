@@ -8,7 +8,7 @@ import model.level.tile.Tile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
 
 public class SpriteAtlas {
@@ -50,9 +50,9 @@ public class SpriteAtlas {
 
     private BufferedImage loadSprite(String path) {
         try {
-            File spriteFile = new File(path);
-            if (spriteFile.exists()) {
-                return ImageIO.read(spriteFile);
+            InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+            if (is != null) {
+                return ImageIO.read(is);
             }
         } catch (IOException e) {
             System.err.println("Failed to load sprite: " + path);

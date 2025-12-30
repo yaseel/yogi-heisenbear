@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +82,9 @@ public class MenuPanel extends JPanel {
 
     private BufferedImage loadBackground(String path) {
         try {
-            File backgroundFile = new File(path);
-            if (backgroundFile.exists()) {
-                return ImageIO.read(backgroundFile);
+            InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+            if (is != null) {
+                return ImageIO.read(is);
             }
         } catch (IOException e) {
             System.err.println("Failed to load image: " + path);
