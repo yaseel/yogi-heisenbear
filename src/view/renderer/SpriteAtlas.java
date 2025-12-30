@@ -54,8 +54,10 @@ public class SpriteAtlas {
             if (is != null) {
                 return ImageIO.read(is);
             }
+            System.err.println("Resource not found in JAR: " + path);
         } catch (IOException e) {
             System.err.println("Failed to load sprite: " + path);
+            e.printStackTrace();
         }
         return null;
     }
