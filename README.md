@@ -1,5 +1,18 @@
 # 🐻 Yogi Heisenbear
 
+Yogi Heisenbear is an action-packed platformer game where you guide Heisenbear through dangerous territories. Collect meth baskets, guns and money, dodge the relentless agents, and navigate treacherous terrain across multiple difficulty levels. With dynamic music and challenging gameplay, can you complete the levels and top the leaderboard?
+
+## Screenshots
+
+| Main Menu | Easy Level |
+|:---:|:---:|
+| ![Menu](screenshots/menu.png) | ![Easy](screenshots/easylevel.png) |
+
+| Medium Level | Hard Level |
+|:---:|:---:|
+| ![Medium](screenshots/mediumlevel.png) | ![Hard](screenshots/hardlevel.png) |
+
+
 ## For Players: How to Run the Game
 
 ### Quick Start (Any Platform)
