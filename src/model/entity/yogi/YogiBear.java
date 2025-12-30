@@ -84,7 +84,7 @@ public class YogiBear extends Entity {
     public void jump() {
         if (onGround) {
             if (crouching) {
-                velocityY = (int) (GameConfig.JUMP_STRENGTH * 0.6);
+                velocityY = GameConfig.JUMP_STRENGTH * 0.6f;
             } else {
                 velocityY = GameConfig.JUMP_STRENGTH;
             }
@@ -96,12 +96,12 @@ public class YogiBear extends Entity {
     public void update() {
         velocityY += GameConfig.GRAVITY;
 
-        int newY = y + velocityY;
+        int newY = y + Math.round(velocityY);
         if (CollisionHelper.canMoveHere(x, newY, width, height, levelData, this)) {
             y = newY;
             onGround = false;
         } else {
-            y = CollisionHelper.getEntityYPosUnderRoofOrAboveFloor(y, height, velocityY);
+            y = CollisionHelper.getEntityYPosUnderRoofOrAboveFloor(y, height, Math.round(velocityY));
             if (velocityY > 0) {
                 onGround = true;
                 clearDropThrough();
@@ -146,10 +146,6 @@ public class YogiBear extends Entity {
             return;
         }
         super.updateAnimationTick();
-    }
-
-    public int getWidth() {
-        return width;
     }
 
     public int getHeight() {
@@ -222,10 +218,6 @@ public class YogiBear extends Entity {
 
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-    }
-
-    public boolean isJumping() {
-        return velocityY < 0;
     }
 
     public boolean isFalling() {

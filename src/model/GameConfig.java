@@ -12,8 +12,8 @@ public class GameConfig {
     public static final double WINDOW_SCALE = 1.5;
 
     public static final int MOVE_SPEED = 5;
-    public static final int GRAVITY = 1;
-    public static final int JUMP_STRENGTH = -15;
+    public static final float GRAVITY = 0.7f;
+    public static final int JUMP_STRENGTH = -12;
 
     public static final int AGENT_SPEED = 2;
     public static final int AGENT_PAUSE_FRAMES = 180;

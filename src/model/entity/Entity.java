@@ -6,7 +6,8 @@ import java.awt.*;
 
 public abstract class Entity {
     protected int x, y;
-    protected int velocityX, velocityY;
+    protected int velocityX;
+    protected float velocityY;
     protected int action;
     protected Rectangle hitbox;
 
@@ -57,10 +58,6 @@ public abstract class Entity {
         return y;
     }
 
-    public int getVelocityY() {
-        return velocityY;
-    }
-
     public int getAction() {
         return action;
     }
@@ -81,7 +78,7 @@ public abstract class Entity {
         this.y = y;
     }
 
-    public void setVelocityY(int velocityY) {
+    public void setVelocityY(float velocityY) {
         this.velocityY = velocityY;
     }
 }

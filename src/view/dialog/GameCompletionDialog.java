@@ -1,6 +1,5 @@
 package view.dialog;
 
-import view.GameFont;
 import javax.swing.*;
 import java.awt.*;
 
@@ -24,23 +23,23 @@ public class GameCompletionDialog {
         c.anchor = GridBagConstraints.WEST;
 
         JLabel scoreLabel = new JLabel("Score: " + score);
-        scoreLabel.setFont(GameFont.getFont(14f));
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         c.gridy = 1;
         panel.add(scoreLabel, c);
 
         JLabel timeLabel = new JLabel("Time: " + formattedTime);
-        timeLabel.setFont(GameFont.getFont(14f));
+        timeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         c.gridy = 2;
         panel.add(timeLabel, c);
 
         JLabel nameLabel = new JLabel("Enter your name:");
-        nameLabel.setFont(GameFont.getFont(14f));
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         c.gridy = 3;
         c.gridwidth = 1;
         panel.add(nameLabel, c);
 
         JTextField nameField = new JTextField("Player", 15);
-        nameField.setFont(GameFont.getFont(14f));
+        nameField.setFont(new Font("Arial", Font.PLAIN, 14));
         c.gridx = 1;
         panel.add(nameField, c);
 
