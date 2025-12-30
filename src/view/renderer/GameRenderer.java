@@ -11,6 +11,7 @@ import model.level.Level;
 import model.level.LevelLoader;
 import model.level.tile.Tile;
 import model.entity.yogi.YogiBear;
+import view.GameFont;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,7 +42,7 @@ public class GameRenderer {
         renderYogi(g, yogi);
         renderAgents(g, level);
         renderUI(g, gameModel);
-        //renderHitbox(g, yogi.getHitbox());
+        // renderHitbox(g, yogi.getHitbox());
     }
 
     private void renderHitbox(Graphics g, Rectangle hitbox) {
@@ -184,7 +185,7 @@ public class GameRenderer {
         }
 
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.setFont(GameFont.getFont(20f));
         g.drawString("Score: " + gameModel.getScore(), 10, 60);
         g.drawString("Time: " + gameModel.getFormattedTime(), 10, 85);
     }
@@ -194,7 +195,7 @@ public class GameRenderer {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha / 255f));
             g2d.setColor(Color.RED);
-            g2d.setFont(new Font("Arial", Font.BOLD, 60));
+            g2d.setFont(GameFont.getFont(60f));
 
             FontMetrics fm = g2d.getFontMetrics();
             int msgWidth = fm.stringWidth(message);
