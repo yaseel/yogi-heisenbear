@@ -18,7 +18,6 @@ Yogi Heisenbear is an action-packed platformer game where you guide Heisenbear t
 ### Quick Start (Any Platform)
 1. Make sure you have Java installed (Java 8 or higher)
    - Check with: `java -version`
-   - If not installed, download from: https://adoptium.net
 
 2. Run the game:
    ```bash
@@ -70,9 +69,8 @@ See `HOW_TO_BUILD.md` for advanced packaging options (creating macOS .app bundle
 ---
 
 ## Controls
-- Arrow Keys: Move
-- Space: Jump
+- A & D: Move
+- W: Jump
 - S: Crouch
-- ESC: Menu
 
 Enjoy the game! 🎮
