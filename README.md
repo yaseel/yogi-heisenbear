@@ -55,19 +55,6 @@ This creates `YogiHeisenbear.jar` which can be distributed and run on any platfo
 
 ---
 
-## Distribution
-
-To distribute your game:
-1. Build the JAR using the build script above
-2. Give users:
-   - `YogiHeisenbear.jar`
-   - `RUN.bat` (for Windows) or `run.sh` (for Mac/Linux)
-   - Instructions to install Java if they don't have it
-
-See `HOW_TO_BUILD.md` for advanced packaging options (creating macOS .app bundles, Windows .exe files, etc.)
-
----
-
 ## Controls
 - A & D: Move
 - W: Jump
